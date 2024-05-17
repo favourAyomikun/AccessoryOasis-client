@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React from "react";
 
-export default function Login() {
+export default function SignIn() {
   return (
     <main className="pt-40">
       <form className="max-w-md mx-auto bg-gray-300 shadow-lg rounded-lg border-2 border-gray-500 p-6">
