@@ -1,5 +1,6 @@
 'use-client'
 
+import Link from "next/link";
 import React from "react";
 
 export default function Login() {
@@ -19,7 +20,7 @@ export default function Login() {
           <input type="password" className="input" />
         </div>
         <button className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-24">
-          Login
+          <Link href={'/homepage'}>Login</Link>
         </button>
       </form>
     </main>
