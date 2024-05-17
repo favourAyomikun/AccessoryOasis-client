@@ -20,7 +20,7 @@ export default function Login() {
           <input type="password" className="input" />
         </div>
         <button className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-24">
-          <Link href={'/homepage'}>Login</Link>
+          <Link href={'/homepage'}>Sign In</Link>
         </button>
       </form>
     </main>
