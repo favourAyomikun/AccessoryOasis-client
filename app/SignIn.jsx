@@ -2,57 +2,76 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import * as Yup from "yup";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [registered, setRegistered] = useState('')
-  const [successMessage, setSuccessMessage] = useState()
-  const [errorMessage, setErrorMessage] = useState()
+  const [successMessage, setSuccessMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
-  const router = useRouter()
+  const router = useRouter();
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required!"),
+    password: Yup.string()
+      .min(4, "Password must be more than four characters")
+      .required("Password is required!"),
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!email && !password) { 
-      console.log('fill the input fields!')
-      return;
-    } 
-    
-    if(!email) {
-      console.log('email is required')
-      return
-    } 
-
-    if(!password) { 
-      console.log('password is required')
-      return
-     }
-
-     if(password.length < 4) {
-      console.log('password must be more than 4 characters')
-      return
-     }
-
-
     try {
-      const response = await fetch("http://localhost:4000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      await validationSchema.validate(
+        { email, password },
+        { abortEarly: false }
+      );
+
+      try {
+        const response = await fetch(
+          "http://localhost:4000/api/auth/register",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          }
+        );
+
+        const data = await response.json();
+        if (response.ok) {
+          console.log(data.message);
+          setErrorMessage({})
+          // router.push('/homepage')
+        } else {
+          console.log(data.error);
+          console.log("Invalid email or passsword");
+        }
+      } catch (error) {
+        console.error("Error registering", error);
+      }
+    } catch (validationError) {
+      const validationErrors = {};
+      validationError.inner.forEach((err) => {
+        validationErrors[err.path] = err.message;
       });
 
-      const data = await response.json()
-      if (response.ok) {
-        console.log(data.message)
-        // router.push('/homepage')
+      if (validationErrors.email && validationErrors.password) {
+        console.log("Both email and password are required.");
       } else {
-      console.log(data.error)
-        console.log("Invalid email or passsword");
+        if (validationErrors.email) {
+          console.log("Email error:", validationErrors.email);
+        }
+        if (validationErrors.password) {
+          if (password === "") {
+            console.log("Password is required!");
+          } else {
+            console.log("Password error:", validationErrors.password);
+          }
+        }
       }
-    } catch (error) {
-      console.error("Error registering", error);
     }
   };
 
