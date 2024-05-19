@@ -1,14 +1,40 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [registered, setRegistered] = useState('')
+  const [successMessage, setSuccessMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState()
+
+  const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!email && !password) { 
+      console.log('fill the input fields!')
+      return;
+    } 
+    
+    if(!email) {
+      console.log('email is required')
+      return
+    } 
+
+    if(!password) { 
+      console.log('password is required')
+      return
+     }
+
+     if(password.length < 4) {
+      console.log('password must be more than 4 characters')
+      return
+     }
+
 
     try {
       const response = await fetch("http://localhost:4000/api/auth/register", {
@@ -16,9 +42,13 @@ export default function SignIn() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
+      const data = await response.json()
       if (response.ok) {
-        console.log("register successful");
+        console.log(data.message)
+        // router.push('/homepage')
       } else {
+      console.log(data.error)
         console.log("Invalid email or passsword");
       }
     } catch (error) {
@@ -58,7 +88,7 @@ export default function SignIn() {
           type="submit"
           className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-24"
         >
-          <Link href={'/'}>Sign In</Link>
+          Sign In
         </button>
       </form>
     </main>
