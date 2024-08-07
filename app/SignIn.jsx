@@ -92,7 +92,7 @@ useEffect(() => {
       )}
       <form
         onSubmit={handleSubmit}
-        className="max-w-md mx-auto bg-gray-300 shadow-lg rounded-lg border-2 border-gray-500 p-6"
+        className="max-w-md mx-auto bg-[#F1DDC9] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
           <label htmlFor="email" className="label">
@@ -118,7 +118,7 @@ useEffect(() => {
         </div>
         <button
           type="submit"
-          className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-full"
+          className="mt-5 bg-[#D84727] text-white font-bold py-2 px-4 rounded-md w-full"
         >
           Sign In
         </button>
