@@ -17,11 +17,16 @@ export default function HomePage() {
 
       <section className='flex items-center justify-around border border-blue-400 mt-20'>
         <Image src='/bag.gif' height={350} width={350} className='rounded-md h-[300px] object-cover'/>
-        <p className='text-center font-semibold w-[50%]'>Experience the art of accessorizing with AccessoryOasis. Our range of meticulously designed accessories provides you with the perfect blend of sophistication and flair. Whether you're dressing up or down, find the pieces that complete your look with finesse.</p>
+        <p className='text-center text-[#333333] font-semibold w-[50%] tracking-wide'>Experience the art of accessorizing with AccessoryOasis. Our range of meticulously designed accessories provides you with the perfect blend of sophistication and flair. Whether you're dressing up or down, find the pieces that complete your look with finesse.</p>
       </section>
 
       <section>
-        
+        <h2>Available Accessories</h2>
+        <div>
+          <p>Watches</p>
+          <p>Bags & Purses</p>
+          <p>Sunglasses</p>
+        </div>
       </section>
     </main>
   )
