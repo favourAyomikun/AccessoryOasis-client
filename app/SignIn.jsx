@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [successMessage, setSuccessMessage] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
@@ -25,32 +25,26 @@ export default function SignIn() {
     e.preventDefault();
 
     try {
-      await validationSchema.validate(
-        { email, password },
-        { abortEarly: false }
-      );
+      await validationSchema.validate({ email, password }, { abortEarly: false });
+
+      setErrorMessage("");
 
       try {
-        const response = await fetch(
-          "http://localhost:4000/api/auth/register",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          }
-        );
+        const response = await fetch("http://localhost:4000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
         const data = await response.json();
         if (response.ok) {
-          console.log(data.message);
-          setErrorMessage({})
-          // router.push('/homepage')
+          setSuccessMessage(data.message);
+          router.push('/homepage')
         } else {
-          console.log(data.error);
-          console.log("Invalid email or passsword");
+          setErrorMessage(data.error);
         }
       } catch (error) {
-        console.error("Error registering", error);
+        setErrorMessage("Error signing in");
       }
     } catch (validationError) {
       const validationErrors = {};
@@ -59,24 +53,43 @@ export default function SignIn() {
       });
 
       if (validationErrors.email && validationErrors.password) {
-        console.log("Both email and password are required.");
+        setErrorMessage("Both email and password are required.");
       } else {
         if (validationErrors.email) {
-          console.log("Email error:", validationErrors.email);
+          setErrorMessage(validationErrors.email);
         }
         if (validationErrors.password) {
           if (password === "") {
-            console.log("Password is required!");
+            setErrorMessage("Password is required");
           } else {
-            console.log("Password error:", validationErrors.password);
+            setErrorMessage(validationErrors.password);
           }
         }
       }
     }
   };
 
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setSuccessMessage(''),
+    setErrorMessage('')
+  }, 1500)
+
+  return () => clearTimeout(timer)
+}, [successMessage, errorMessage])
+
   return (
     <main className="pt-40">
+      {successMessage && (
+        <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
+          {successMessage}
+        </p>
+      )}
+      {errorMessage && (
+        <p className="text-red-600 font-semibold text-center tracking-wide text-[17px] mb-2">
+          {errorMessage}
+        </p>
+      )}
       <form
         onSubmit={handleSubmit}
         className="max-w-md mx-auto bg-gray-300 shadow-lg rounded-lg border-2 border-gray-500 p-6"
@@ -105,7 +118,7 @@ export default function SignIn() {
         </div>
         <button
           type="submit"
-          className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-24"
+          className="mt-5 bg-[#4169E1] text-white font-bold py-2 px-4 rounded-md w-full"
         >
           Sign In
         </button>
