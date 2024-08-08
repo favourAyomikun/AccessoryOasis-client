@@ -1,3 +1,4 @@
+import AccessoriesData from '@/component/accessoriesData'
 import { Kelly_Slab, Taviraj } from 'next/font/google'
 import Image from 'next/image'
 import React from 'react'
@@ -23,9 +24,7 @@ export default function HomePage() {
       <section>
         <h2>Available Accessories</h2>
         <div>
-          <p>Watches</p>
-          <p>Bags & Purses</p>
-          <p>Sunglasses</p>
+          <AccessoriesData />
         </div>
       </section>
     </main>
