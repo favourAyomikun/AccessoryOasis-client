@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -12,6 +13,7 @@ export default function SignIn() {
 
   const router = useRouter();
 
+  // schema for sign in
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -25,21 +27,26 @@ export default function SignIn() {
     e.preventDefault();
 
     try {
-      await validationSchema.validate({ email, password }, { abortEarly: false });
+      await validationSchema.validate(
+        { email, password },
+        { abortEarly: false }
+      );
 
       setErrorMessage("");
 
+      // post data/sign in details to ther server
       try {
-        const response = await fetch("http://localhost:4000/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
+        const response = await axios.post(
+          "http://localhost:4000/api/auth/register",
+          {
+            email,
+            password,
+          }
+        );
 
-        const data = await response.json();
-        if (response.ok) {
+        if (response.status === 200) {
           setSuccessMessage(data.message);
-          router.push('/homepage')
+          router.push("/homepage");
         } else {
           setErrorMessage(data.error);
         }
@@ -69,14 +76,14 @@ export default function SignIn() {
     }
   };
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setSuccessMessage(''),
-    setErrorMessage('')
-  }, 1500)
+  // function to clear error and success message that pops up on the form
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage(""), setErrorMessage("");
+    }, 1500);
 
-  return () => clearTimeout(timer)
-}, [successMessage, errorMessage])
+    return () => clearTimeout(timer);
+  }, [successMessage, errorMessage]);
 
   return (
     <main className="pt-40">

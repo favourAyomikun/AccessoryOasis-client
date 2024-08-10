@@ -1,10 +1,9 @@
 'use client'
 
+import axios from 'axios';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { ImSpinner10 } from "react-icons/im";
-
-const server_route = 'http://localhost:4000'
 
 const AccessoriesData = () => {
   // set different state in a varaible
@@ -13,17 +12,12 @@ const AccessoriesData = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    // fetch data from the server
     const fetchAccessories = async () => {
-      // fetch data from the server
       try {
-        const response = await fetch('http://localhost:4000/api/accessories')
-        if(!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-        setAccessoriesData(data)
-        console.log(data);     
+        const response = await axios.get('http://localhost:4000/api/accessories')
+        setAccessoriesData(response.data)
+        console.log(response.data);     
         setLoading(false)   
       } catch (error) {
         console.error('Error fetching accessories', error)
