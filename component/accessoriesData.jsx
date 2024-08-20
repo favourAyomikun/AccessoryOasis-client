@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { ImSpinner10 } from "react-icons/im";
 
-const AccessoriesData = () => {
+const AccessoriesList = () => {
   // set different state in a varaible
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true)
@@ -38,20 +38,23 @@ const AccessoriesData = () => {
   }
 
   return (
-    <div>
-      <ul>
-        {/* render data gotten from the server */}
+    // render data gotten from the server
+     <div>
+        <h2>Available Accessories</h2>
+       <div className='grid grid-cols-3'>
         {accessoriesData.map(accessory => (
-          <li key={accessory._id}>
+          <div key={accessory._id} className='border-2 border-red-400 h-44'>
+            <Image src={`http://localhost:4000${accessory.image_url}`} alt={accessory.name} height={300} width={300}/>
+            <div>
             <h2>{accessory.name}</h2>
             <p>{accessory.price}</p>
             <p>{accessory.category}</p>
-            <Image src={`http://localhost:4000${accessory.image_url}`} alt={accessory.name} height={300} width={300}/>
-          </li>
+            </div>
+          </div>
         ))}
-      </ul>
-    </div>
+      </div>
+     </div>
   )
 }
 
-export default AccessoriesData
+export default AccessoriesList

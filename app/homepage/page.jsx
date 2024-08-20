@@ -1,4 +1,4 @@
-import AccessoriesData from '@/component/accessoriesData'
+import AccessoriesList from '@/component/accessoriesData'
 import { Kelly_Slab, Taviraj } from 'next/font/google'
 import Image from 'next/image'
 import React from 'react'
@@ -21,12 +21,9 @@ export default function HomePage() {
         <p className='text-center text-[#333333] font-semibold w-[50%] tracking-wide'>Experience the art of accessorizing with AccessoryOasis. Our range of meticulously designed accessories provides you with the perfect blend of sophistication and flair. Whether you're dressing up or down, find the pieces that complete your look with finesse.</p>
       </section>
 
-      <section>
-        <h2>Available Accessories</h2>
-        <div>
-          <AccessoriesData />
-        </div>
-      </section>
+      <section className='mt-14'>
+     </section>
+        <AccessoriesList />
     </main>
-  )
+    )
 }
