@@ -34,7 +34,7 @@ export default function SignIn() {
 
       setErrorMessage("");
 
-      // post data/sign in details to ther server
+      // post data/sign in details to the server
       try {
         const response = await axios.post(
           "http://localhost:4000/api/auth/register",
