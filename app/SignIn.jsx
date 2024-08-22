@@ -2,8 +2,8 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from 'next/link'
 import { useEffect, useState } from "react";
-import * as Yup from "yup";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -13,17 +13,7 @@ export default function SignIn() {
 
   const router = useRouter();
 
-  // schema for sign in
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required!"),
-    password: Yup.string()
-      .min(4, "Password must be more than four characters")
-      .required("Password is required!"),
-  });
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
@@ -98,7 +88,7 @@ export default function SignIn() {
         </p>
       )}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleRegister}
         className="max-w-md mx-auto bg-[#F1DDC9] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
@@ -129,6 +119,7 @@ export default function SignIn() {
         >
           Sign In
         </button>
+        <p className="mt-5">Don't have an account? <Link href='/sign-up' className="underline underline-offset-2">Sign up</Link></p>
       </form>
     </main>
   );
