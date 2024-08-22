@@ -13,64 +13,43 @@ export default function SignIn() {
 
   const router = useRouter();
 
-  const handleRegister = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
     try {
-      await validationSchema.validate(
-        { email, password },
-        { abortEarly: false }
-      );
-
+      // Clear any previous error messages
       setErrorMessage("");
 
-      // post data/sign in details to the server
-      try {
-        const response = await axios.post(
-          "http://localhost:4000/api/auth/register",
-          {
-            email,
-            password,
-          }
-        );
-
-        if (response.status === 200) {
-          setSuccessMessage(data.message);
-          router.push("/homepage");
-        } else {
-          setErrorMessage(data.error);
+      // Send login data to the server
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/login",
+        {
+          email,
+          password,
         }
-      } catch (error) {
-        setErrorMessage("Error signing in");
-      }
-    } catch (validationError) {
-      const validationErrors = {};
-      validationError.inner.forEach((err) => {
-        validationErrors[err.path] = err.message;
-      });
+      );
 
-      if (validationErrors.email && validationErrors.password) {
-        setErrorMessage("Both email and password are required.");
+      if (response.status === 200) {
+        setSuccessMessage(response.data.message);
+
+        // Store JWT in local storage (or cookies) and redirect to the homepage
+        localStorage.setItem("token", response.data.token);
+
+        router.push("/homepage");
       } else {
-        if (validationErrors.email) {
-          setErrorMessage(validationErrors.email);
-        }
-        if (validationErrors.password) {
-          if (password === "") {
-            setErrorMessage("Password is required");
-          } else {
-            setErrorMessage(validationErrors.password);
-          }
-        }
+        setErrorMessage(response.data.error || "Login failed");
       }
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "Error during login");
     }
   };
 
-  // function to clear error and success message that pops up on the form
+  // Function to clear error and success messages after a few seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSuccessMessage(""), setErrorMessage("");
-    }, 1500);
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [successMessage, errorMessage]);
@@ -88,7 +67,7 @@ export default function SignIn() {
         </p>
       )}
       <form
-        onSubmit={handleRegister}
+        onSubmit={handleSignIn}
         className="max-w-md mx-auto bg-[#F1DDC9] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
@@ -99,7 +78,14 @@ export default function SignIn() {
             type="email"
             className="input"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              e.target.setCustomValidity("");
+            }}
+            onInvalid={(e) => {
+              e.target.setCustomValidity("Enter your email");
+            }}
+            required
           />
         </div>
         <div className="input_container">
@@ -110,7 +96,14 @@ export default function SignIn() {
             type="password"
             className="input"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              e.target.setCustomValidity("");
+            }}
+            onInvalid={(e) => {
+              e.target.setCustomValidity("Enter your password");
+            }}
+            required
           />
         </div>
         <button
@@ -119,7 +112,10 @@ export default function SignIn() {
         >
           Sign In
         </button>
-        <p className="mt-5">Don't have an account? <Link href='/sign-up' className="underline underline-offset-2">Sign up</Link></p>
+        <p className="mt-5">
+          Don't have an account?{" "}
+          <Link href='/sign-up' className="underline underline-offset-2">Sign up</Link>
+        </p>
       </form>
     </main>
   );
