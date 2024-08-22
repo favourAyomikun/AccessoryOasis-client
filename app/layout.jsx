@@ -1,5 +1,6 @@
 import { Raleway } from "next/font/google";
 import "./globals.css";
+import { ShopAccessoryContextProvider } from "@/context/ShopAccessoryContext";
 
 const raleway = Raleway({ subsets: ["latin"], weight: '400' });
 
@@ -11,7 +12,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={raleway.className}>{children}</body>
+      <body className={raleway.className}>
+        <ShopAccessoryContextProvider>
+          {children}
+        </ShopAccessoryContextProvider>
+        </body>
     </html>
   );
 }

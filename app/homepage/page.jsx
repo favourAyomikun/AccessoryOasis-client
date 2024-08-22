@@ -3,10 +3,11 @@
 import { Kelly_Slab, Taviraj } from "next/font/google";
 import Image from "next/image";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import Link from "next/link";
+import { ShopAccessoryContext } from "@/context/ShopAccessoryContext";
 
 const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
 const taviraj = Taviraj({ subsets: ["latin"], weight: "300" });
@@ -16,6 +17,8 @@ export default function HomePage() {
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { addToCart } = useContext(ShopAccessoryContext)
 
   useEffect(() => {
     const fetchAccessories = async () => {
@@ -37,6 +40,10 @@ export default function HomePage() {
 
     fetchAccessories();
   }, []);
+
+  const handleAddToCart = (itemId) => {
+    addToCart(itemId); // Add item to cart using context
+  };
 
   if (loading) {
     return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
@@ -101,16 +108,17 @@ export default function HomePage() {
             >
               <Image
                 src={`http://localhost:4000${accessory.image_url}`}
+                unoptimized
                 alt={accessory.name}
                 height={300}
                 width={300}
                 className="w-full h-[300px] object-cover object-center"
               />
               <div>
-                <h2 className="text-blue-500">{accessory.name}</h2>
+                <h2>{accessory.name}</h2>
                 <p>${accessory.price}</p>
                 <p>{accessory.category}</p>
-                <button className="bg-red-500 p-2 border-2 border-orange-500 text-white">
+                <button className="bg-red-500 p-2 border-2 border-orange-500 text-white" onClick={() => handleAddToCart(accessory._id)}>
                   Add to Cart
                 </button>
               </div>
