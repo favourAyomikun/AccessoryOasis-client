@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -18,11 +18,35 @@ const Register = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post()
+      const response = await axios.post('http://localhost:4000/api/auth/register', {
+        username,
+        email,
+        password,
+      })
+
+      if (response.status === 201) {
+        setSuccessMessage(response.data.message)
+        setErrorMessage('')
+        console.log(response.data)
+
+        // redirect to sign in after user has registered
+        router.push('/')
+      } else {
+        setErrorMessage(response.data.message || 'Registration failed')
+      }
     } catch (error) {
-      
+      setErrorMessage(error.response?.data?.message || "Error during registration");
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 3000); // Clear messages after 3 seconds
+
+    return () => clearTimeout(timer); // Clear timeout if the component unmounts
+  }, [successMessage, errorMessage]);
 
   return (
     <main className="pt-40">
@@ -45,7 +69,7 @@ const Register = () => {
             Username
           </label>
           <input
-            type="email"
+            type="username"
             className="input"
             value={username}
             onChange={(e) => {
