@@ -1,96 +1,131 @@
-'use client'
+'use client';
 
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 
 export const ShopAccessoryContext = createContext(null);
 
 export const ShopAccessoryContextProvider = (props) => {
-    const [cartAccessoryItems, setCartAccessoryItems] = useState({})
-    const [userId, setUserId] = useState(null)
+  const [cartAccessoryItems, setCartAccessoryItems] = useState([]);
+  const [accessoriesData, setAccessoriesData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // fetch cart-accessory items from the backend when the component mounts
-        const fetchCart = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/cart', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.get('token')}`
-                    },
-                })
-                setCartAccessoryItems(response.data)
-            } catch (error) {
-                console.error('Error fetching cart', error)
-            }
-        }
-
-        fetchCart()
-    }, [])
-
-
-    const saveCartToDatabase = async (accessoryItems) => {
-        try {
-            await axios.post('http://localhost:4000/api/cart', 
-                { accessoryItems },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.get('token')}`
-                    },
-                }
-            )
-        } catch (error) {
-            console.error('Error saving cart item', error)
-        }
+  // Extract user ID from token
+  const getUserIdFromToken = () => {
+    if (typeof window !== 'undefined') { // Check if running in the browser
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const decoded = jwtDecode(token);
+        return decoded.userId;
+      }
     }
+    return null;
+  };
 
-    const addToCart = async (accessoryItemId) => {
-        setCartAccessoryItems(prevItems => {
-            const updatedCart = {
-                ...prevItems, 
-                [itemId]: prevItems[itemId] ? prevItems[itemId] + 1 : 1,
-            }
-            saveCartToDatabase(updatedCart)
-            return updatedCart;
-        })
-    }
+  const userId = getUserIdFromToken();
 
-    const removeFromCart = async (accessoryItemId) => {
-        setCartAccessoryItems((prevItems) => {
-          const updatedCart = { ...prevItems };
-          if (updatedCart[accessoryItemId] > 1) {
-            updatedCart[accessoryItemId] -= 1;
-          } else {
-            delete updatedCart[accessoryItemId];
-          }
-          saveCartToDatabase(updatedCart);
-          return updatedCart;
+  useEffect(() => {
+    const fetchAccessories = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/accessories');
+        setAccessoriesData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching accessories', error);
+        setLoading(false);
+      }
+    };
+
+    fetchAccessories();
+  }, []);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!userId) return;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get('http://localhost:4000/api/cart', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          params: { userId }
         });
-      };
+        setCartAccessoryItems(response.data);
+      } catch (error) {
+        console.error('Error fetching cart', error);
+      }
+    };
 
-    const getTotalCartAmount = () => {
-        let totalAmount = 0;
-        for (const itemId in cartItems) {
-          if (cartItems[itemId] > 0) {
-            // Assuming you have item details like price fetched from the backend
-            const item = items.find((i) => i.id === Number(itemId));
-            if (item) {
-              totalAmount += cartItems[itemId] * item.price;
-            }
-          }
+    fetchCart();
+  }, [userId]);
+
+  const saveCartToDatabase = async (accessoryItems) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token || !userId) return;
+
+      const response = await axios.post(
+        'http://localhost:4000/api/cart',
+        { items: accessoryItems, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-        return totalAmount;
-      };
-
-    const accessoryContextValue = {
-        cartAccessoryItems,
-        addToCart,
-        removeFromCart,
-        getTotalCartAmount
+      );
+      console.log('Cart saved to the database:', response.data);
+    } catch (error) {
+      console.error('Error saving cart item:', error);
     }
+  };
 
-    return (
-        <ShopAccessoryContext.Provider value={accessoryContextValue}>
-            {props.children}
-        </ShopAccessoryContext.Provider>
-    )
-}
+  const addToCart = async (accessoryItemId) => {
+    setCartAccessoryItems(prevItems => {
+      const updatedCart = {
+        ...prevItems,
+        [accessoryItemId]: prevItems[accessoryItemId] ? prevItems[accessoryItemId] + 1 : 1,
+      };
+      saveCartToDatabase(updatedCart);
+      return updatedCart;
+    });
+  };
+
+  const removeFromCart = async (accessoryItemId) => {
+    setCartAccessoryItems(prevItems => {
+      const updatedCart = { ...prevItems };
+      if (updatedCart[accessoryItemId] > 1) {
+        updatedCart[accessoryItemId] -= 1;
+      } else {
+        delete updatedCart[accessoryItemId];
+      }
+      saveCartToDatabase(updatedCart);
+      return updatedCart;
+    });
+  };
+
+  const getTotalCartAmount = () => {
+    return cartAccessoryItems.reduce((totalAmount, itemId) => {
+      const item = accessoriesData.find((i) => i._id === itemId);
+      if (item) {
+        return totalAmount + cartAccessoryItems[itemId] * item.price;
+      }
+      return totalAmount;
+    }, 0);
+  };
+
+  const accessoryContextValue = {
+    cartAccessoryItems,
+    addToCart,
+    removeFromCart,
+    getTotalCartAmount,
+    accessoriesData
+  };
+
+  return (
+    <ShopAccessoryContext.Provider value={accessoryContextValue}>
+      {props.children}
+    </ShopAccessoryContext.Provider>
+  );
+};

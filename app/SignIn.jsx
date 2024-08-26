@@ -2,8 +2,9 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Link from 'next/link'
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -33,9 +34,22 @@ export default function SignIn() {
         setSuccessMessage(response.data.message);
 
         // Store JWT in local storage (or cookies) and redirect to the homepage
-        localStorage.setItem("token", response.data.token);
+        const token = response.data.token;
+        localStorage.setItem("token", token);
 
-        router.push("/homepage");
+        // Decode the token to get userId and other info (if needed)
+        const decodedToken = jwtDecode(token);
+        console.log('Decoded token:', decodedToken)
+
+        const userId = decodedToken.id;
+        console.log("User ID:", userId); // Debug log for userId
+
+        if (userId) {
+          localStorage.setItem("userId", userId);
+          router.push("/homepage");
+        } else {
+          setErrorMessage("User ID not found in the token.");
+        }
       } else {
         setErrorMessage(response.data.error || "Login failed");
       }
@@ -114,7 +128,9 @@ export default function SignIn() {
         </button>
         <p className="mt-5">
           Don't have an account?{" "}
-          <Link href='/sign-up' className="underline underline-offset-2">Sign up</Link>
+          <Link href="/sign-up" className="underline underline-offset-2">
+            Sign up
+          </Link>
         </p>
       </form>
     </main>

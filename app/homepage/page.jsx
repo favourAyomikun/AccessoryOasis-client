@@ -18,7 +18,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { addToCart } = useContext(ShopAccessoryContext)
+  const { addToCart } = useContext(ShopAccessoryContext);
 
   useEffect(() => {
     const fetchAccessories = async () => {
@@ -61,7 +61,7 @@ export default function HomePage() {
         >
           AccessoryOasis
         </h1>
-        <Link href='/homepage/cartPage'>
+        <Link href="/homepage/cartPage">
           <HiOutlineShoppingCart className="text-[35px]" />
         </Link>
       </nav>
@@ -118,12 +118,15 @@ export default function HomePage() {
                 <h2>{accessory.name}</h2>
                 <p>${accessory.price}</p>
                 <p>{accessory.category}</p>
-                <button className="bg-red-500 p-2 border-2 border-orange-500 text-white" onClick={() => handleAddToCart(accessory._id)}>
+                <button
+                  className="bg-red-500 p-2 border-2 border-orange-500 text-white"
+                  onClick={() => handleAddToCart(accessory._id)}
+                >
                   Add to Cart
                 </button>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       </div>
     </main>
