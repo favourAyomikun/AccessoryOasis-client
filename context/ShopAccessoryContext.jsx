@@ -1,13 +1,13 @@
 'use client';
 
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { createContext, useEffect, useState } from "react";
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { createContext, useEffect, useState } from 'react';
 
 export const ShopAccessoryContext = createContext(null);
 
 export const ShopAccessoryContextProvider = (props) => {
-  const [cartAccessoryItems, setCartAccessoryItems] = useState([]);
+  const [cartAccessoryItems, setCartAccessoryItems] = useState({});
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +25,7 @@ export const ShopAccessoryContextProvider = (props) => {
 
   const userId = getUserIdFromToken();
 
+  // Fetch accessories data
   useEffect(() => {
     const fetchAccessories = async () => {
       try {
@@ -40,6 +41,7 @@ export const ShopAccessoryContextProvider = (props) => {
     fetchAccessories();
   }, []);
 
+  // Fetch cart data from backend
   useEffect(() => {
     const fetchCart = async () => {
       if (!userId) return;
@@ -52,7 +54,12 @@ export const ShopAccessoryContextProvider = (props) => {
           },
           params: { userId }
         });
-        setCartAccessoryItems(response.data);
+        // Convert response to a format suitable for cartAccessoryItems
+        const cartItems = response.data.reduce((acc, item) => {
+          acc[item.itemId] = item.quantity;
+          return acc;
+        }, {});
+        setCartAccessoryItems(cartItems);
       } catch (error) {
         console.error('Error fetching cart', error);
       }
@@ -61,26 +68,28 @@ export const ShopAccessoryContextProvider = (props) => {
     fetchCart();
   }, [userId]);
 
-  const saveCartToDatabase = async (accessoryItems) => {
+  // Save cart data to the backend
+  const saveCartToDatabase = async (cartData) => {
     try {
       const token = localStorage.getItem('authToken');
-      if (!token || !userId) return;
-
-      const response = await axios.post(
-        'http://localhost:4000/api/cart',
-        { items: accessoryItems, userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await axios.post('http://localhost:4000/api/saveCart', {
+        userId,
+        items: Object.keys(cartData).map(itemId => ({
+          itemId,
+          quantity: cartData[itemId],
+        })),
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
-      console.log('Cart saved to the database:', response.data);
+      });
+      console.log('Cart saved successfully');
     } catch (error) {
-      console.error('Error saving cart item:', error);
+      console.error('Error saving cart:', error);
     }
   };
 
+  // Add item to cart
   const addToCart = async (accessoryItemId) => {
     setCartAccessoryItems(prevItems => {
       const updatedCart = {
@@ -92,6 +101,7 @@ export const ShopAccessoryContextProvider = (props) => {
     });
   };
 
+  // Remove item from cart
   const removeFromCart = async (accessoryItemId) => {
     setCartAccessoryItems(prevItems => {
       const updatedCart = { ...prevItems };
@@ -105,14 +115,18 @@ export const ShopAccessoryContextProvider = (props) => {
     });
   };
 
+  // Calculate total amount of items in cart
   const getTotalCartAmount = () => {
-    return cartAccessoryItems.reduce((totalAmount, itemId) => {
-      const item = accessoriesData.find((i) => i._id === itemId);
-      if (item) {
-        return totalAmount + cartAccessoryItems[itemId] * item.price;
+    let totalAmount = 0;
+    for (const itemId in cartAccessoryItems) {
+      if (cartAccessoryItems[itemId] > 0) {
+        const item = accessoriesData.find((i) => i._id === itemId);
+        if (item) {
+          totalAmount += cartAccessoryItems[itemId] * item.price;
+        }
       }
-      return totalAmount;
-    }, 0);
+    }
+    return totalAmount;
   };
 
   const accessoryContextValue = {
@@ -120,7 +134,7 @@ export const ShopAccessoryContextProvider = (props) => {
     addToCart,
     removeFromCart,
     getTotalCartAmount,
-    accessoriesData
+    accessoriesData,
   };
 
   return (
