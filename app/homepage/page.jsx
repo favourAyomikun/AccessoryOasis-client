@@ -3,11 +3,10 @@
 import { Kelly_Slab, Taviraj } from "next/font/google";
 import Image from "next/image";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import Link from "next/link";
-import { ShopAccessoryContext } from "@/context/ShopAccessoryContext";
 
 const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
 const taviraj = Taviraj({ subsets: ["latin"], weight: "300" });
@@ -17,33 +16,6 @@ export default function HomePage() {
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const { addToCart } = useContext(ShopAccessoryContext);
-
-  useEffect(() => {
-    const fetchAccessories = async () => {
-      try {
-        // fetch data from the server
-        const response = await axios.get(
-          "http://localhost:4000/api/accessories"
-        );
-        setAccessoriesData(response.data);
-        console.log(response.data);
-        setLoading(false);
-      } catch (error) {
-        // catch default error or unexpected error
-        console.error("Error fetching accessories", error);
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchAccessories();
-  }, []);
-
-  const handleAddToCart = (itemId) => {
-    addToCart(itemId); // Add item to cart using context
-  };
 
   if (loading) {
     return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
