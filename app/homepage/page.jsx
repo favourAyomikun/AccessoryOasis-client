@@ -3,7 +3,7 @@
 import { Kelly_Slab, Taviraj } from "next/font/google";
 import Image from "next/image";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import Link from "next/link";
@@ -15,7 +15,43 @@ export default function HomePage() {
   // set different state in a varaible
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:4000/api/accessories")
+    .then(response => {
+      setAccessoriesData(response.data)
+      console.log(response.data)
+      setLoading(false)
+    })
+    .catch(error => {
+      setError(error.message)
+      setLoading(false)
+    })
+  }, [])
+
+  const handleAddToCart = async (accessoryId) => {
+    // get userId from local storage
+    const userId = localStorage.getItem('userId')
+
+    try {
+      const response = await axios.post("http://localhost:4000/api/saveCartItems", {
+        userId,
+        items: [
+          {
+            itemId: accessoryId,
+            quantity: 1
+          }
+        ]
+      })
+      console.log(response.data.message)
+      setCartMessage(response.data.message)
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+      setCartMessage("Error adding item to cart. Please try again.");
+    }
+  }
 
   if (loading) {
     return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
