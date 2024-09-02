@@ -22,7 +22,7 @@ const CartPage = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/getCartItems?userId=${userId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
         );
         console.log(cartItems);
         console.log(response.data);
@@ -74,7 +74,7 @@ const CartPage = () => {
     const userId = localStorage.getItem("userId");
 
     try {
-      await axios.delete(`http://localhost:4000/api/removeCartItem/${itemId}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/removeCartItem/${itemId}`, {
         data: { userId },
       });
 fetchCartItems()
@@ -110,7 +110,7 @@ fetchCartItems()
                 className="border p-4 rounded-md bg-white"
               >
                 <Image
-                  src={`http://localhost:4000${item.itemId.image_url}`}
+                  src={`${process.env.NEXT_PUBLIC_API_URL}${item.itemId.image_url}`}
                   unoptimized
                   alt={item.itemId.name}
                   height={150}

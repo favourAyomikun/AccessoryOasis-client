@@ -17,9 +17,9 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
-
+  
   useEffect(() => {
-    axios.get("http://localhost:4000/api/accessories")
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/accessories`)
     .then(response => {
       setAccessoriesData(response.data)
       console.log(response.data)
@@ -36,7 +36,7 @@ export default function HomePage() {
     const userId = localStorage.getItem('userId')
 
     try {
-      const response = await axios.post("http://localhost:4000/api/saveCartItems", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/saveCartItems`, {
         userId,
         items: [
           {
@@ -115,7 +115,7 @@ export default function HomePage() {
               className="border-2 border-pink-400 w-[80%]"
             >
               <Image
-                src={`http://localhost:4000${accessory.image_url}`}
+                src={`${process.env.NEXT_PUBLIC_API_URL}${accessory.image_url}`}
                 unoptimized
                 alt={accessory.name}
                 height={300}
