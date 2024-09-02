@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,35 +12,33 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-    const fetchCartItems = async () => {
-      const userId = localStorage.getItem("userId");
-      console.log(userId);
+  const fetchCartItems = async () => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
 
-      if (!userId) {
-        setError("User ID is not found.");
-        return;
-      }
+    if (!userId) {
+      setError("User ID is not found.");
+      return;
+    }
 
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
-        );
-        console.log(cartItems);
-        console.log(response.data);
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
+      );
+      console.log(cartItems);
+      console.log(response.data);
 
-        const items = response.data.items || [];
-        setCartItems(items); // The backend returns the items directly
+      const items = response.data.items || [];
+      setCartItems(items); // The backend returns the items directly
 
-        // Calculate and set the total price
-        const total = calculateTotalPrice(items);
-        setTotalPrice(total);
-      } catch (error) {
-        setError("Error fetching cart items. Please try again.");
-        console.error("Failed to fetch cart items", error);
-      }
-    };
-
-
+      // Calculate and set the total price
+      const total = calculateTotalPrice(items);
+      setTotalPrice(total);
+    } catch (error) {
+      setError("Error fetching cart items. Please try again.");
+      console.error("Failed to fetch cart items", error);
+    }
+  };
 
   const calculateTotalPrice = (items) => {
     // Ensure items is an array
@@ -65,19 +64,22 @@ const CartPage = () => {
     return total;
   };
 
-    // Fetch cart items on component mount
-    useEffect(() => {
-      fetchCartItems();
-    }, []);
+  // Fetch cart items on component mount
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
 
   const handleRemoveItem = async (itemId) => {
     const userId = localStorage.getItem("userId");
 
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/removeCartItem/${itemId}`, {
-        data: { userId },
-      });
-fetchCartItems()
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/removeCartItem/${itemId}`,
+        {
+          data: { userId },
+        }
+      );
+      fetchCartItems();
       // const updatedItems = cartItems.filter((item) => item._id !== itemId);
       // setCartItems(updatedItems);
       // calculateTotalPrice(updatedItems);
@@ -85,7 +87,6 @@ fetchCartItems()
       setError("Error removing item from cart. Please try again.");
       console.error("Failed to remove item from cart", error);
     }
-
   };
 
   const handleCheckout = () => {
@@ -139,12 +140,14 @@ fetchCartItems()
         </div>
         <div className="mt-10">
           <h2 className="text-2xl font-bold">Total Price: ${totalPrice}</h2>
-          <button
-            className="mt-4 bg-green-500 text-white py-3 px-6 rounded"
-            onClick={handleCheckout}
-          >
-            Proceed to Checkout
-          </button>
+          <Link href={"/homepage/cartPage/orderDetails"}>
+            <button
+              className="mt-10 bg-green-500 text-white py-3 px-6 rounded"
+              onClick={handleCheckout}
+            >
+              Proceed to Checkout
+            </button>
+          </Link>
         </div>
       </div>
     </main>
