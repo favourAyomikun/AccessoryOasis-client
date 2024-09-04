@@ -82,10 +82,10 @@ export default function SignIn() {
       )}
       <form
         onSubmit={handleSignIn}
-        className="max-w-md mx-auto bg-[#F1DDC9] shadow-lg rounded-lg p-6"
+        className="max-w-md mx-auto bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
-          <label htmlFor="email" className="label">
+          <label htmlFor="email" className="label text-[#1F3A93]">
             Email
           </label>
           <input
@@ -103,7 +103,7 @@ export default function SignIn() {
           />
         </div>
         <div className="input_container">
-          <label htmlFor="password" className="label">
+          <label htmlFor="password" className="label text-[#1F3A93]">
             Password
           </label>
           <input
@@ -122,13 +122,13 @@ export default function SignIn() {
         </div>
         <button
           type="submit"
-          className="mt-5 bg-[#D84727] text-white font-bold py-2 px-4 rounded-md w-full"
+          className="mt-5 bg-[#1F3A93] text-[#FFFDEB] tracking-wide font-bold py-2 px-4 rounded-md w-full"
         >
           Sign In
         </button>
-        <p className="mt-5">
+        <p className="mt-5 text-[#1F3A93]">
           Don't have an account?{" "}
-          <Link href="/sign-up" className="underline underline-offset-2">
+          <Link href="/sign-up" className="underline underline-offset-2  text-[#B76E79]">
             Sign up
           </Link>
         </p>

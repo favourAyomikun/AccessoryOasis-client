@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .input {
-    @apply mt-3 w-full p-2 rounded outline-none;
+    @apply mt-3 w-full p-2 rounded outline-none border border-[#B76E79];
 }
 
 .input_container {

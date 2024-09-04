@@ -49,7 +49,7 @@ const Register = () => {
   }, [successMessage, errorMessage]);
 
   return (
-    <main className="pt-40">
+    <main className="pt-40 bg-[#FFFDD0] h-screen">
       {successMessage && (
         <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
           {successMessage}
