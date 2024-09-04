@@ -11,5 +11,5 @@
 }
 
 .label {
-    @apply font-semibold text-lg tracking-wider;
+    @apply font-semibold text-lg tracking-wider text-[#1F3A93];
 }

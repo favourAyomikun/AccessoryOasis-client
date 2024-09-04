@@ -62,10 +62,10 @@ const Register = () => {
       )}
       <form
         onSubmit={handleRegister}
-        className=" max-w-md mx-auto bg-[#F1DDC9] shadow-lg rounded-lg p-6"
+        className=" max-w-md mx-auto bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
-          <label htmlFor="username" className="label">
+          <label htmlFor="username" className="label ">
             Username
           </label>
           <input
@@ -83,7 +83,7 @@ const Register = () => {
           />
         </div>
         <div className="input_container">
-          <label htmlFor="email" className="label">
+          <label htmlFor="email" className="label ">
             Email
           </label>
           <input
@@ -101,7 +101,7 @@ const Register = () => {
           />
         </div>
         <div className="input_container">
-          <label htmlFor="password" className="label">
+          <label htmlFor="password" className="label ">
             Password
           </label>
           <input
@@ -120,13 +120,13 @@ const Register = () => {
         </div>
         <button
           type="submit"
-          className="mt-5 bg-[#D84727] text-white font-bold py-2 px-4 rounded-md w-full"
+          className="mt-5 bg-[#1F3A93] text-[#FFFDEB] tracking-wide font-bold py-2 px-4 rounded-md w-full"
         >
           Sign Up
         </button>
-        <p className="mt-5">
+        <p className="mt-5 text-[#1F3A93]">
           Already have an account?{" "}
-          <Link href="/" className="underline underline-offset-2">
+          <Link href="/" className="underline underline-offset-2 text-[#B76E79]">
             Sign in
           </Link>
         </p>

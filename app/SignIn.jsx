@@ -85,7 +85,7 @@ export default function SignIn() {
         className="max-w-md mx-auto bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
-          <label htmlFor="email" className="label text-[#1F3A93]">
+          <label htmlFor="email" className="label">
             Email
           </label>
           <input
@@ -103,7 +103,7 @@ export default function SignIn() {
           />
         </div>
         <div className="input_container">
-          <label htmlFor="password" className="label text-[#1F3A93]">
+          <label htmlFor="password" className="label">
             Password
           </label>
           <input
