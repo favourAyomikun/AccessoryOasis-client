@@ -5,10 +5,12 @@ import Image from "next/image";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
-import { HiOutlineShoppingCart } from "react-icons/hi";
+// import { HiOutlineShoppingCart } from "react-icons/hi";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
-const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
+// const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
 const taviraj = Taviraj({ subsets: ["latin"], weight: "300" });
 
 export default function HomePage() {
@@ -17,41 +19,45 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/accessories`)
-    .then(response => {
-      setAccessoriesData(response.data)
-      console.log(response.data)
-      setLoading(false)
-    })
-    .catch(error => {
-      setError(error.message)
-      setLoading(false)
-    })
-  }, [])
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/accessories`)
+      .then((response) => {
+        setAccessoriesData(response.data);
+        console.log(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }, []);
 
   const handleAddToCart = async (accessoryId) => {
     // get userId from local storage
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem("userId");
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/saveCartItems`, {
-        userId,
-        items: [
-          {
-            itemId: accessoryId,
-            quantity: 1
-          }
-        ]
-      })
-      console.log(response.data.message)
-      setCartMessage(response.data.message)
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/saveCartItems`,
+        {
+          userId,
+          items: [
+            {
+              itemId: accessoryId,
+              quantity: 1,
+            },
+          ],
+        }
+      );
+      console.log(response.data.message);
+      setCartMessage(response.data.message);
     } catch (error) {
       console.error("Failed to add to cart", error);
       setCartMessage("Error adding item to cart. Please try again.");
     }
-  }
+  };
 
   if (loading) {
     return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
@@ -62,34 +68,27 @@ export default function HomePage() {
   }
 
   return (
-    <main className={`${taviraj.className} bg-[#E5E5E5] h-[100%] w-full pt-6`}>
-      <nav className="flex items-center justify-around border border-blue-400">
-        <h1
-          className={`${kellyslab.className} text-[#d84727] text-center text-[33px]`}
-        >
-          AccessoryOasis
-        </h1>
-        <Link href="/homepage/cartPage">
-          <HiOutlineShoppingCart className="text-[35px]" />
-        </Link>
-      </nav>
+    <main className={`${taviraj.className} bg-[#FFFDD0] h-[100%] w-full`}>
+      <Navbar />
 
-      <section className="container w-[80%] py-10 mx-auto flex items-center justify-around bg-[#F1DDC9] border border-blue-400 mt-12 rounded-md">
-        <h2 className="flex text-center text-[#333333] w-[40%] font-semibold tracking-wide leading-8 text-xl">
-          Discover Your Perfect Accessory at AccessoryOasis, Where Every Piece
-          Enhances Your Unique Style.
-        </h2>
-        <Image
-          src="/applewatch_animation.gif"
-          unoptimized
-          alt="applewatch"
-          height={350}
-          width={350}
-          className="rounded-xl"
-        />
+      <section className="pt-32">
+        <div className="container w-[80%] py-10 mx-auto flex items-center justify-around bg-[#FFFDEB] shadow-lg rounded-md">
+          <h2 className="flex text-center text-[#333333] w-[40%] font-semibold tracking-wide leading-8 text-xl">
+            Discover Your Perfect Accessory at AccessoryOasis, Where Every Piece
+            Enhances Your Unique Style.
+          </h2>
+          <Image
+            src="/applewatch_animation.gif"
+            unoptimized
+            alt="applewatch"
+            height={350}
+            width={350}
+            className="rounded-xl"
+          />
+        </div>
       </section>
 
-      <section className="flex items-center justify-around border border-blue-400 mt-20">
+      <section className="flex items-center justify-around mt-20">
         <Image
           src="/bag.gif"
           unoptimized
@@ -106,13 +105,13 @@ export default function HomePage() {
         </p>
       </section>
 
-      <div className="border border-red-400 mt-20">
-        <h2>Available Accessories</h2>
+      <div className="mt-20">
+        <h2 className="text-[#333333] text-xl pl-8 mb-5 font-semibold tracking-wider">Available Accessories</h2>
         <div className="grid grid-cols-3 gap-x-8 place-items-center gap-y-10">
           {accessoriesData.map((accessory) => (
             <div
               key={accessory._id}
-              className="border-2 border-pink-400 w-[80%]"
+              className="bg-[#FFFDD0] border border-[#1F3A93] rounded-md overflow-hidden w-[80%]"
             >
               <Image
                 src={`${process.env.NEXT_PUBLIC_API_URL}${accessory.image_url}`}
@@ -122,21 +121,23 @@ export default function HomePage() {
                 width={300}
                 className="w-full h-[300px] object-cover object-center"
               />
-              <div>
-                <h2>{accessory.name}</h2>
-                <p>${accessory.price}</p>
-                <p>{accessory.category}</p>
+              <div className="flex flex-col justify-center items-center py-3">
+                <h2 className="text-lg font-semibold tracking-wide">{accessory.name}</h2>
+                <p className="font-semibold">${accessory.price}</p>
+                {/* <p>{accessory.category}</p> */}
                 <button
-                  className="bg-red-500 p-2 border-2 border-orange-500 text-white"
+                  className="bg-[#1F3A93] border border-[#B76E79] p-2 w-[50%] rounded-sm mt-5 text-[#E6A8A1]"
                   onClick={() => handleAddToCart(accessory._id)}
                 >
                   Add to Cart
                 </button>
               </div>
             </div>
-          ))} 
+          ))}
         </div>
       </div>
+
+      <Footer />
     </main>
   );
 }
