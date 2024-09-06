@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PaystackPaymentIntegration from "@/components/PaymentIntegrationPage";
+import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 const OrderDetailsPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -18,6 +20,7 @@ const OrderDetailsPage = () => {
         );
         const items = response.data.items || [];
         setCartItems(items);
+        console.log(items)
 
         // Calculate and set the total price
         const total = items.reduce((acc, item) => {
@@ -33,42 +36,58 @@ const OrderDetailsPage = () => {
   }, []);
 
   return (
-    <main className="bg-[#F5F5F5] h-[100%] w-full py-20">
-      <h1 className="text-2xl font-bold text-center mb-6">Order Details</h1>
-      <div className="container mx-auto p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cartItems.length > 0 ? (
-            cartItems.map((item) => (
-              <div
-                key={item.itemId._id}
-                className="border p-4 rounded-md bg-white"
-              >
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${item.itemId.image_url}`}
-                  alt={item.itemId.name}
-                  className="object-cover object-center w-32 h-32"
-                />
-                <h2 className="text-xl font-semibold mt-4">
-                  {item.itemId.name}
-                </h2>
-                <p className="text-gray-600">Quantity: {item.quantity}</p>
-                <p className="text-gray-600">Price: ${item.itemId.price}</p>
-                <p className="text-gray-800 font-bold mt-2">
-                  Total: ${item.quantity * item.itemId.price}
-                </p>
-              </div>
-            ))
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </div>
-        <div className="mt-10">
-          <h2 className="text-2xl font-bold">Total Price: ${totalPrice}</h2>
-        </div>
-      </div>
+    <div className="bg-[#FFFDD0] h-[100%]">
+      <Navbar />
 
-        <PaystackPaymentIntegration />
-    </main>
+      <main className="pt-[105px] pb-10">
+        <h1 className="text-center text-lg md:text-2xl font-bold text-[#333333] mb-5">
+          Order Details
+        </h1>
+
+        {!cartItems.length ? (
+          <p className="text-center">Loading your order details...</p>
+        ) : (
+          <table className="container mx-auto table-fixed border-separate border-spacing-2 border border-[#B76E79] rounded-lg shadow-md">
+            {cartItems.map((item) => (
+              <tbody key={item.itemId._id}>
+                <tr>
+                  <td>
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.itemId.image_url}`}
+                      unoptimized
+                      alt={item.itemId.name}
+                      height={150}
+                      width={150}
+                      className="w-48 h-20 md:h-40 rounded-lg object-cover object-center"
+                    />
+                  </td>
+                  <td className="md:text-lg font-medium md:font-semibold text-[#1F3A93]">
+                    {item.itemId.name}
+                  </td>
+                  <td className="text-sm font-medium md:font-semibold md:tracking-wide text-[#1F3A93]">
+                    ${item.itemId.price}
+                  </td>
+                  <td className="text-sm md:text-base font-semibold">
+                    Quantity: {item.quantity}
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        )}
+
+        {totalPrice > 0 && (
+          <div className="container mx-auto w-[30%] mt-4">
+            <div className="border-t border-black w-[100%]"></div>
+            <p className="font-medium md:font-semibold mb-1 text-[#B76E79]">
+              Total: ${totalPrice}
+            </p>
+          </div>
+        )}
+
+      <PaystackPaymentIntegration />
+      </main>
+    </div>
   );
 };
 

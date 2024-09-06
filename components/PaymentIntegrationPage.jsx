@@ -28,13 +28,11 @@ const PaystackPaymentIntegration = () => {
   };
 
   const style = {
-    input:
-      "block w-full px-4 py-2 mb-4 rounded-md border border-gray-300 focus:outline-none focus:border-primary-500",
-    button: "block w-full px-4 py-2 bg-[#1369A1] text-white rounded-md",
+    button: "block w-full px-4 py-2 bg-[#1F3A93] text-white rounded-md mt-5",
   };
 
   return (
-    <div className="px-4">
+    <div className="mt-12">
       <h1 className="text-center text-[25px] my-4 font-[600]">
         Make your payment here
       </h1>
@@ -42,28 +40,28 @@ const PaystackPaymentIntegration = () => {
         <input
           type="email"
           placeholder="Email"
-          className={style.input}
+          className='input'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="number"
           placeholder="Amount"
-          className={style.input}
+          className='input'
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
         <input
           type="text"
           placeholder="Name"
-          className={style.input}
+          className='input'
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="number"
           placeholder="Phone number"
-          className={style.input}
+          className='input'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
