@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -80,9 +81,6 @@ const CartPage = () => {
         }
       );
       fetchCartItems();
-      // const updatedItems = cartItems.filter((item) => item._id !== itemId);
-      // setCartItems(updatedItems);
-      // calculateTotalPrice(updatedItems);
     } catch (error) {
       setError("Error removing item from cart. Please try again.");
       console.error("Failed to remove item from cart", error);
@@ -98,59 +96,86 @@ const CartPage = () => {
   }
 
   return (
-    <main className="bg-[#F5F5F5] h-[100%] w-full pt-6">
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Your Shopping Cart
-      </h1>
-      <div className="container mx-auto p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.isArray(cartItems) && cartItems.length > 0 ? (
-            cartItems.map((item) => (
-              <div
-                key={item.itemId._id}
-                className="border p-4 rounded-md bg-white"
+    <div className="bg-[#FFFDD0] h-full">
+      <Navbar />
+
+      <main className="pt-[105px] pb-10">
+        <h1 className="text-center text-lg md:text-2xl font-bold text-[#333333] mb-5">
+          Your Shopping Cart
+        </h1>
+
+        {!cartItems.length ? (
+          <p className="text-center">Loading your cart...</p>
+        ) : (
+          <table className="container mx-auto table-fixed border-separate border-spacing-2 border-2 border-[#B76E79] rounded-lg shadow-md">
+            {cartItems.map((item) => (
+              <tbody key={item.itemId._id}>
+                <tr>
+                  <td>
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.itemId.image_url}`}
+                      unoptimized
+                      alt={item.itemId.name}
+                      height={150}
+                      width={150}
+                      className="w-48 h-20 md:h-40 rounded-lg object-cover object-center"
+                    />
+                  </td>
+                  <td className="md:text-lg font-medium md:font-semibold text-[#1F3A93]">
+                    {item.itemId.name}
+                  </td>
+                  <td className="text-sm md:text-base font-semibold">
+                    Quantity: {item.quantity}
+                  </td>
+                  <td className="text-sm font-medium md:font-semibold md:tracking-wide text-[#1F3A93]">
+                    ${item.itemId.price}
+                  </td>
+                  <td className="">
+                    <button
+                      onClick={() => handleRemoveItem(item.itemId._id)}
+                      className="bg-[#1F3A93] px-[6px] w-[19px] rounded-sm font-semibold text-[#FFFDD0]"
+                    >
+                      -
+                    </button>
+                    <input
+                      onChange={(e) =>
+                        updateItemCartAmount(e.target.value, item.itemId._id)
+                      }
+                      type="number"
+                      className="w-1/4 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
+                      value={item.quantity}
+                    />
+                    <button
+                      onClick={() => addToCart(item.itemId._id)}
+                      className="bg-[#1F3A93] px-[4px] text-center rounded-sm font-semibold text-[#FFFDD0]"
+                    >
+                      +
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        )}
+
+        {totalPrice > 0 && (
+          <main className="container mx-auto w-[30%] mt-2">
+            <div className="border-t border-black w-[100%]"></div>
+            <div>
+              <p className="font-medium md:font-semibold mb-1 text-[#B76E79]">
+                SubTotal: ${totalPrice}
+              </p>
+              <Link
+                href={"/homepage/cartPage/orderDetails"}
+                className="block text-center bg-[#1F3A93] px-2 py-2 md:py-3 leading-none rounded text-white text-sm md:text-base"
               >
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${item.itemId.image_url}`}
-                  unoptimized
-                  alt={item.itemId.name}
-                  height={150}
-                  width={150}
-                  className="object-cover object-center"
-                />
-                <h2 className="text-xl font-semibold mt-4">
-                  {item.itemId.name}
-                </h2>
-                <p className="text-gray-600">Quantity: {item.quantity}</p>
-                <p className="text-gray-600">Price: ${item.itemId.price}</p>
-                <p className="text-gray-800 font-bold mt-2">
-                  Total: ${item.quantity * item.itemId.price}
-                </p>
-                <button
-                  className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-                  onClick={() => handleRemoveItem(item.itemId._id)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </div>
-        <div className="mt-10">
-          <h2 className="text-2xl font-bold">Total Price: ${totalPrice}</h2>
-          <Link href={"/homepage/cartPage/orderDetails"}>
-            <button
-              className="mt-10 bg-green-500 text-white py-3 px-6 rounded"
-              onClick={handleCheckout}
-            >
-              Proceed to Checkout
-            </button>
-          </Link>
-        </div>
-      </div>
-    </main>
+                <button onClick={handleCheckout}>Proceed to Checkout</button>
+              </Link>
+            </div>
+          </main>
+        )}
+      </main>
+    </div>
   );
 };
 
