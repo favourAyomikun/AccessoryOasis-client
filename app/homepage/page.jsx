@@ -19,13 +19,28 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
+  const [username, setUsername] = useState('')
 
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    
+    if (userId) {
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/getUserProfile/${userId}`)
+        .then((response) => {
+          setUsername(response.data.username);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user profile", error);
+          setUsername("Guest");
+        });
+    }
+    
+    // Fetch accessory data
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/api/accessories`)
       .then((response) => {
         setAccessoriesData(response.data);
-        console.log(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -33,6 +48,7 @@ export default function HomePage() {
         setLoading(false);
       });
   }, []);
+
 
   const handleAddToCart = async (accessoryId) => {
     // get userId from local storage
@@ -71,7 +87,9 @@ export default function HomePage() {
     <main className={`${taviraj.className} bg-[#FFFDD0] h-[100%] w-full`}>
       <Navbar />
 
-      <section className="pt-32">
+      <section className="pt-24">
+        <div className="pl-10 text-[21px] uppercase font-semibold tracking-wider mb-5">Welcome {username}</div>
+
         <div className="container w-[80%] py-10 mx-auto flex items-center justify-around bg-[#FFFDEB] shadow-lg rounded-md">
           <h2 className="flex text-center text-[#333333] w-[40%] font-semibold tracking-wide leading-8 text-xl">
             Discover Your Perfect Accessory at AccessoryOasis, Where Every Piece
