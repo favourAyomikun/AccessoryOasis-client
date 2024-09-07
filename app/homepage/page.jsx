@@ -16,14 +16,13 @@ export default function HomePage() {
   const { handleAddToCart } = useContext(CartContext);
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
-  const [totalQuantity, setTotalQuantity] = useState(0);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
 
+    // fetch user profile, username to be precise!
     if (userId) {
       axios
         .get(`${process.env.NEXT_PUBLIC_API_URL}/api/getUserProfile/${userId}`)
@@ -50,7 +49,7 @@ export default function HomePage() {
   }, []);
 
   if (loading) {
-    return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
+    return <ImSpinner10 className="animate-spin text-[40px] text-[#FFFDD0] flex justify-center items-center" />;
   }
 
   if (error) {

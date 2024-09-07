@@ -9,38 +9,10 @@ import Navbar from "@/components/Navbar";
 import { CartContext } from "@/context/CartContext";
 
 const CartPage = () => {
-  const { cartItems, fetchCartItems } = useContext(CartContext);
+  const { cartItems, handleRemoveItem, handleAddToCart } = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
   const router = useRouter();
-
-  // const fetchCartItems = async () => {
-  //   const userId = localStorage.getItem("userId");
-  //   console.log(userId);
-
-  //   if (!userId) {
-  //     setError("User ID is not found.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
-  //     );
-  //     console.log(cartItems);
-  //     console.log(response.data);
-
-  //     const items = response.data.items || [];
-  //     setCartItems(items); // The backend returns the items directly
-
-  //     // Calculate and set the total price
-  //     const total = calculateTotalPrice(items);
-  //     setTotalPrice(total);
-  //   } catch (error) {
-  //     setError("Error fetching cart items. Please try again.");
-  //     console.error("Failed to fetch cart items", error);
-  //   }
-  // };
 
   const calculateTotalPrice = (items) => {
     // Ensure items is an array
@@ -70,25 +42,7 @@ const CartPage = () => {
   useEffect(() => {
     const total = calculateTotalPrice(cartItems)
     setTotalPrice(total)
-    // fetchCartItems();
   }, [cartItems]);
-
-  const handleRemoveItem = async (itemId) => {
-    const userId = localStorage.getItem("userId");
-
-    try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/removeCartItem/${itemId}`,
-        {
-          data: { userId },
-        }
-      );
-      fetchCartItems();
-    } catch (error) {
-      setError("Error removing item from cart. Please try again.");
-      console.error("Failed to remove item from cart", error);
-    }
-  };
 
   const handleCheckout = () => {
     router.push("/checkout");
@@ -141,15 +95,13 @@ const CartPage = () => {
                       -
                     </button>
                     <input
-                      onChange={(e) =>
-                        updateItemCartAmount(e.target.value, item.itemId._id)
-                      }
+                      onChange={(e) => (e.target.value, item.itemId._id)}
                       type="number"
                       className="w-1/4 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
                       value={item.quantity}
                     />
                     <button
-                      onClick={() => addToCart(item.itemId._id)}
+                      onClick={() => handleAddToCart(item.itemId._id)}
                       className="bg-[#1F3A93] px-[4px] text-center rounded-sm font-semibold text-[#FFFDD0]"
                     >
                       +

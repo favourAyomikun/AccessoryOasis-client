@@ -46,13 +46,31 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
+  const handleRemoveItem = async (itemId) => {
+    const userId = localStorage.getItem("userId");
+
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/removeCartItem/${itemId}`,
+        {
+          data: { userId },
+        }
+      );
+      fetchCartItems();
+    } catch (error) {
+      setError("Error removing item from cart. Please try again.");
+      console.error("Failed to remove item from cart", error);
+    }
+  };
+
+
   useEffect(() => {
     // Fetch the cart items when the context provider mounts
     fetchCartItems();
   }, []);
 
   return (
-    <CartContext.Provider value={{ totalQuantity, cartItems, handleAddToCart, fetchCartItems }}>
+    <CartContext.Provider value={{ totalQuantity, cartItems, handleAddToCart, handleRemoveItem, fetchCartItems }}>
       {children}
     </CartContext.Provider>
   );
