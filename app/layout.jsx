@@ -1,7 +1,8 @@
 import { Raleway } from "next/font/google";
 import "./globals.css";
+import { CartContextProvider } from "@/context/CartContext";
 
-const raleway = Raleway({ subsets: ["latin"], weight: '400' });
+const raleway = Raleway({ subsets: ["latin"], weight: "400" });
 
 export const metadata = {
   title: "Create Next App",
@@ -12,8 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={raleway.className}>
+        <CartContextProvider>
           {children}
-        </body>
+        </CartContextProvider>
+      </body>
     </html>
   );
 }

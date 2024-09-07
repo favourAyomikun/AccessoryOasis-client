@@ -1,29 +1,29 @@
 "use client";
 
-import { Kelly_Slab, Taviraj } from "next/font/google";
+import { Taviraj } from "next/font/google";
 import Image from "next/image";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
-// import { HiOutlineShoppingCart } from "react-icons/hi";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CartContext } from "@/context/CartContext";
 
-// const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
 const taviraj = Taviraj({ subsets: ["latin"], weight: "300" });
 
 export default function HomePage() {
   // set different state in a varaible
+  const { handleAddToCart } = useContext(CartContext);
   const [accessoriesData, setAccessoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cartMessage, setCartMessage] = useState("");
   const [error, setError] = useState(null);
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("");
+  const [totalQuantity, setTotalQuantity] = useState(0);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    
+
     if (userId) {
       axios
         .get(`${process.env.NEXT_PUBLIC_API_URL}/api/getUserProfile/${userId}`)
@@ -35,7 +35,7 @@ export default function HomePage() {
           setUsername("Guest");
         });
     }
-    
+
     // Fetch accessory data
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/api/accessories`)
@@ -48,32 +48,6 @@ export default function HomePage() {
         setLoading(false);
       });
   }, []);
-
-
-  const handleAddToCart = async (accessoryId) => {
-    // get userId from local storage
-    const userId = localStorage.getItem("userId");
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/saveCartItems`,
-        {
-          userId,
-          items: [
-            {
-              itemId: accessoryId,
-              quantity: 1,
-            },
-          ],
-        }
-      );
-      console.log(response.data.message);
-      setCartMessage(response.data.message);
-    } catch (error) {
-      console.error("Failed to add to cart", error);
-      setCartMessage("Error adding item to cart. Please try again.");
-    }
-  };
 
   if (loading) {
     return <ImSpinner10 className="animate-spin text-[100px] text-center" />;
@@ -88,7 +62,9 @@ export default function HomePage() {
       <Navbar />
 
       <section className="pt-24">
-        <div className="pl-10 text-[21px] uppercase font-semibold tracking-wider mb-5">Welcome {username}</div>
+        <div className="pl-10 text-[21px] uppercase font-semibold tracking-wider mb-5">
+          Welcome {username}
+        </div>
 
         <div className="container w-[80%] py-10 mx-auto flex items-center justify-around bg-[#FFFDEB] shadow-lg rounded-md">
           <h2 className="flex text-center text-[#333333] w-[40%] font-semibold tracking-wide leading-8 text-xl">
@@ -124,7 +100,9 @@ export default function HomePage() {
       </section>
 
       <div className="mt-20">
-        <h2 className="text-[#333333] text-xl pl-8 mb-5 font-semibold tracking-wider">Available Accessories</h2>
+        <h2 className="text-[#333333] text-xl pl-8 mb-5 font-semibold tracking-wider">
+          Available Accessories
+        </h2>
         <div className="grid grid-cols-3 gap-x-8 place-items-center gap-y-10">
           {accessoriesData.map((accessory) => (
             <div
@@ -140,7 +118,9 @@ export default function HomePage() {
                 className="w-full h-[300px] object-cover object-center"
               />
               <div className="flex flex-col justify-center items-center py-3">
-                <h2 className="text-lg font-semibold tracking-wide">{accessory.name}</h2>
+                <h2 className="text-lg font-semibold tracking-wide">
+                  {accessory.name}
+                </h2>
                 <p className="font-semibold">${accessory.price}</p>
                 {/* <p>{accessory.category}</p> */}
                 <button

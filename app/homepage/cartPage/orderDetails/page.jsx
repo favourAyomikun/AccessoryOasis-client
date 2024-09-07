@@ -37,7 +37,7 @@ const OrderDetailsPage = () => {
 
   return (
     <div className="bg-[#FFFDD0] h-[100%]">
-      <Navbar />
+      {/* <Navbar /> */}
 
       <main className="pt-[105px] pb-10">
         <h1 className="text-center text-lg md:text-2xl font-bold text-[#333333] mb-5">

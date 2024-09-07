@@ -1,45 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { CartContext } from "@/context/CartContext";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, fetchCartItems } = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const fetchCartItems = async () => {
-    const userId = localStorage.getItem("userId");
-    console.log(userId);
+  // const fetchCartItems = async () => {
+  //   const userId = localStorage.getItem("userId");
+  //   console.log(userId);
 
-    if (!userId) {
-      setError("User ID is not found.");
-      return;
-    }
+  //   if (!userId) {
+  //     setError("User ID is not found.");
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
-      );
-      console.log(cartItems);
-      console.log(response.data);
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/api/getCartItems?userId=${userId}`
+  //     );
+  //     console.log(cartItems);
+  //     console.log(response.data);
 
-      const items = response.data.items || [];
-      setCartItems(items); // The backend returns the items directly
+  //     const items = response.data.items || [];
+  //     setCartItems(items); // The backend returns the items directly
 
-      // Calculate and set the total price
-      const total = calculateTotalPrice(items);
-      setTotalPrice(total);
-    } catch (error) {
-      setError("Error fetching cart items. Please try again.");
-      console.error("Failed to fetch cart items", error);
-    }
-  };
+  //     // Calculate and set the total price
+  //     const total = calculateTotalPrice(items);
+  //     setTotalPrice(total);
+  //   } catch (error) {
+  //     setError("Error fetching cart items. Please try again.");
+  //     console.error("Failed to fetch cart items", error);
+  //   }
+  // };
 
   const calculateTotalPrice = (items) => {
     // Ensure items is an array
@@ -67,8 +68,10 @@ const CartPage = () => {
 
   // Fetch cart items on component mount
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    const total = calculateTotalPrice(cartItems)
+    setTotalPrice(total)
+    // fetchCartItems();
+  }, [cartItems]);
 
   const handleRemoveItem = async (itemId) => {
     const userId = localStorage.getItem("userId");
@@ -96,7 +99,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="bg-[#FFFDD0] h-full">
+    <div className="bg-[#FFFDD0] h-[100%]">
       <Navbar />
 
       <main className="pt-[105px] pb-10">
