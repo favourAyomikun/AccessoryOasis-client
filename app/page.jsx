@@ -1,4 +1,3 @@
-// import SignIn from "./signIn";
 "use client";
 
 import axios from "axios";
@@ -72,8 +71,6 @@ export default function Home() {
 
   return (
     <main className="bg-[#FFFDD0] h-screen pt-40">
-      {/* imported sign in component */}
-      {/* <SignIn /> */}
       {successMessage && (
         <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
           {successMessage}
