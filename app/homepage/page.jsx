@@ -48,10 +48,6 @@ export default function HomePage() {
       });
   }, []);
 
-  if (loading) {
-    return <ImSpinner10 className="animate-spin text-[40px] text-[#FFFDD0] flex justify-center items-center" />;
-  }
-
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -102,38 +98,44 @@ export default function HomePage() {
         <h2 className="text-[#333333] text-xl pl-8 mb-5 font-semibold tracking-wider">
           Available Accessories
         </h2>
-        <div className="grid grid-cols-3 gap-x-8 place-items-center gap-y-10">
-          {accessoriesData.map((accessory) => (
-            <div
-              key={accessory._id}
-              className="bg-[#FFFDD0] border border-[#1F3A93] rounded-md overflow-hidden w-[80%]"
-            >
-              <Image
-                src={`${process.env.NEXT_PUBLIC_API_URL}${accessory.image_url}`}
-                unoptimized
-                alt={accessory.name}
-                height={300}
-                width={300}
-                className="w-full h-[300px] object-cover object-center"
-              />
-              <div className="flex flex-col justify-center items-center py-3">
-                <h2 className="text-lg font-semibold tracking-wide">
-                  {accessory.name}
-                </h2>
-                <p className="font-semibold">${accessory.price}</p>
-                {/* <p>{accessory.category}</p> */}
-                <button
-                  className="bg-[#1F3A93] border border-[#B76E79] p-2 w-[50%] rounded-sm mt-5 text-[#E6A8A1]"
-                  onClick={() => handleAddToCart(accessory._id)}
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
+        {loading ? (
+          // show spinner while loading
+          <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
+        ) : (
+          // show accessories data once loaded
+          <div className="grid grid-cols-3 gap-x-8 place-items-center gap-y-10">
+            {accessoriesData.map((accessory) => (
+              <div
+                key={accessory._id}
+                className="bg-[#FFFDD0] border border-[#1F3A93] rounded-md overflow-hidden w-[80%]"
+              >
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}${accessory.image_url}`}
+                  unoptimized
+                  alt={accessory.name}
+                  height={300}
+                  width={300}
+                  className="w-full h-[300px] object-cover object-center"
+                />
+                <div className="flex flex-col justify-center items-center py-3">
+                  <h2 className="text-lg font-semibold tracking-wide">
+                    {accessory.name}
+                  </h2>
+                  <p className="font-semibold">${accessory.price}</p>
+                  {/* <p>{accessory.category}</p> */}
+                  <button
+                    className="bg-[#1F3A93] border border-[#B76E79] p-2 w-[50%] rounded-sm mt-5 text-[#E6A8A1]"
+                    onClick={() => handleAddToCart(accessory._id)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <Footer />
     </main>
   );

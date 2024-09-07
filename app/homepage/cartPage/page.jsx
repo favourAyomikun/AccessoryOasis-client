@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { CartContext } from "@/context/CartContext";
+import { ImSpinner10 } from "react-icons/im";
 
 const CartPage = () => {
   const { cartItems, handleRemoveItem, handleAddToCart } = useContext(CartContext);
@@ -62,7 +63,7 @@ const CartPage = () => {
         </h1>
 
         {!cartItems.length ? (
-          <p className="text-center">Loading your cart...</p>
+          <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
         ) : (
           <table className="container mx-auto table-fixed border-separate border-spacing-2 border-2 border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (

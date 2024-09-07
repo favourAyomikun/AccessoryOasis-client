@@ -5,6 +5,7 @@ import axios from "axios";
 import PaystackPaymentIntegration from "@/components/PaymentIntegrationPage";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import { ImSpinner10 } from "react-icons/im";
 
 const OrderDetailsPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -37,7 +38,7 @@ const OrderDetailsPage = () => {
 
   return (
     <div className="bg-[#FFFDD0] h-[100%]">
-      {/* <Navbar /> */}
+      <Navbar />
 
       <main className="pt-[105px] pb-10">
         <h1 className="text-center text-lg md:text-2xl font-bold text-[#333333] mb-5">
@@ -45,7 +46,7 @@ const OrderDetailsPage = () => {
         </h1>
 
         {!cartItems.length ? (
-          <p className="text-center">Loading your order details...</p>
+          <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
         ) : (
           <table className="container mx-auto table-fixed border-separate border-spacing-2 border border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (
