@@ -3,13 +3,24 @@ import Link from "next/link";
 import { Kelly_Slab } from "next/font/google";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { CartContext } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 const kellyslab = Kelly_Slab({ subsets: ["latin"], weight: "400" });
 
 const Navbar = () => {
-  const { totalQuantity } = useContext(CartContext); // Get totalQuantity from context
-  console.log(totalQuantity);
-  
+  // Get totalQuantity from context
+  const { totalQuantity } = useContext(CartContext);
+  const router = useRouter();
+
+  // sign out function
+  const handleSignOut = () => {
+    // remove the jwt token and userId from local storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+
+    // redirect to sign in page
+    router.push("/");
+  };
 
   return (
     <nav className="container max-w-full h-14 fixed flex items-center justify-around bg-[#1F3A93]">
@@ -27,12 +38,12 @@ const Navbar = () => {
           </span>
         )}
       </Link>
-      <Link
-        href={""}
+      <button
+        onClick={handleSignOut}
         className={`${kellyslab.className} text-[#E6A8A1] text-[23px]`}
       >
         Log Out
-      </Link>
+      </button>
     </nav>
   );
 };
