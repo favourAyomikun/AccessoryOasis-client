@@ -10,10 +10,11 @@ import { CartContext } from "@/context/CartContext";
 import { ImSpinner10 } from "react-icons/im";
 
 const CartPage = () => {
-  const { cartItems, handleRemoveItem, handleAddToCart } = useContext(CartContext);
+  const { cartItems, handleRemoveItem, handleAddToCart } =
+    useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const calculateTotalPrice = (items) => {
@@ -50,7 +51,6 @@ const CartPage = () => {
     }, 1000);
   }, [cartItems]);
 
-
   const handleCheckout = () => {
     router.push("/checkout");
   };
@@ -77,7 +77,7 @@ const CartPage = () => {
         ) : (
           <table className="container w-[90%] mx-auto table-fixed border-separate border-spacing-2 text-center border-2 border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (
-              <tbody key={item.itemId._id}>
+              <tbody key={item.itemId._id} className="mb-10">
                 <tr>
                   <td>
                     <Image
@@ -89,7 +89,7 @@ const CartPage = () => {
                       className="w-48 h-20 md:h-40 rounded-lg object-cover object-center"
                     />
                   </td>
-                  <td className="text-base md:text-lg font-medium md:font-semibold text-[#1F3A93]">
+                  <td className="text-[15px] md:text-lg font-medium md:font-semibold text-[#1F3A93]">
                     {item.itemId.name}
                   </td>
                   <td className="text-sm md:text-base font-semibold">
@@ -99,29 +99,28 @@ const CartPage = () => {
                     ${item.itemId.price}
                   </td>
                   <td>
-  <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 ">
-    <button
-      onClick={() => handleRemoveItem(item.itemId._id)}
-      className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
-    >
-      -
-    </button>
-    <input
-      onChange={(e) => (e.target.value, item.itemId._id)}
-      type="number"
-      className="w-11 md:w-10 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
-      value={item.quantity}
-      disabled
-    />
-    <button
-      onClick={() => handleAddToCart(item.itemId._id)}
-      className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
-    >
-      +
-    </button>
-  </div>
-</td>
-
+                    <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 ">
+                      <button
+                        onClick={() => handleRemoveItem(item.itemId._id)}
+                        className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
+                      >
+                        -
+                      </button>
+                      <input
+                        onChange={(e) => (e.target.value, item.itemId._id)}
+                        type="number"
+                        className="w-11 md:w-10 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
+                        value={item.quantity}
+                        disabled
+                      />
+                      <button
+                        onClick={() => handleAddToCart(item.itemId._id)}
+                        className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             ))}

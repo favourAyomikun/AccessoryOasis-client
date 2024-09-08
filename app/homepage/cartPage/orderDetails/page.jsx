@@ -48,7 +48,7 @@ const OrderDetailsPage = () => {
         {!cartItems.length ? (
           <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
         ) : (
-          <table className="container mx-auto table-fixed border-separate border-spacing-2 border border-[#B76E79] rounded-lg shadow-md">
+          <table className="w-[90%] container mx-auto table-fixed border-separate border-spacing-2 border border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (
               <tbody key={item.itemId._id}>
                 <tr>
@@ -62,7 +62,7 @@ const OrderDetailsPage = () => {
                       className="w-48 h-20 md:h-40 rounded-lg object-cover object-center"
                     />
                   </td>
-                  <td className="md:text-lg font-medium md:font-semibold text-[#1F3A93]">
+                  <td className="text-[15px] md:text-lg font-medium md:font-semibold text-[#1F3A93]">
                     {item.itemId.name}
                   </td>
                   <td className="text-sm font-medium md:font-semibold md:tracking-wide text-[#1F3A93]">

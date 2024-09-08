@@ -33,10 +33,10 @@ const PaystackPaymentIntegration = () => {
 
   return (
     <div className="mt-12">
-      <h1 className="text-center text-[25px] my-4 font-[600]">
+      <h1 className="text-center text-lg md:text-2xl my-4 font-[600]">
         Make your payment here
       </h1>
-      <div className="max-w-md mx-auto my-4">
+      <div className="max-w-sm md:max-w-md mx-auto w-[90%] my-4">
         <input
           type="email"
           placeholder="Email"
