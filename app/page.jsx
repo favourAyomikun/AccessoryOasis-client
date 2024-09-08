@@ -19,6 +19,7 @@ export default function Home() {
   const handleSignIn = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     
     try {
       // Send login data to the server
@@ -44,7 +45,6 @@ export default function Home() {
         
         if (userId) {
           localStorage.setItem("userId", userId);
-          setLoading(true);
           router.push("/homepage");
         } else {
           setErrorMessage("User ID not found in the token.");
@@ -72,12 +72,12 @@ export default function Home() {
   return (
     <main className="bg-[#FFFDD0] flex flex-col justify-center h-screen">
       {successMessage && (
-        <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
+        <p className="text-green-600 font-semibold text-center tracking-wide text-[15px] md:text-[17px] mb-2">
           {successMessage}
         </p>
       )}
       {errorMessage && (
-        <p className="text-red-600 font-semibold text-center tracking-wide text-[17px] mb-2">
+        <p className="text-red-600 font-semibold text-center tracking-wide text-[15px] md:text-[17px] mb-2">
           {errorMessage}
         </p>
       )}
