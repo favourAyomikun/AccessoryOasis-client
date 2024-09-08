@@ -13,6 +13,7 @@ const CartPage = () => {
   const { cartItems, handleRemoveItem, handleAddToCart } = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); 
   const router = useRouter();
 
   const calculateTotalPrice = (items) => {
@@ -41,9 +42,14 @@ const CartPage = () => {
 
   // Fetch cart items on component mount
   useEffect(() => {
-    const total = calculateTotalPrice(cartItems)
-    setTotalPrice(total)
+    setLoading(true);
+    setTimeout(() => {
+      const total = calculateTotalPrice(cartItems);
+      setTotalPrice(total);
+      setLoading(false);
+    }, 1000);
   }, [cartItems]);
+
 
   const handleCheckout = () => {
     router.push("/checkout");
@@ -54,7 +60,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="bg-[#FFFDD0] h-[100%]">
+    <div className="bg-[#FFFDD0] h-[100vh] md:h-[100vh]">
       <Navbar />
 
       <main className="pt-[105px] pb-10">
@@ -62,8 +68,12 @@ const CartPage = () => {
           Your Shopping Cart
         </h1>
 
-        {!cartItems.length ? (
+        {loading ? (
           <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
+        ) : cartItems.length === 0 ? (
+          <p className="text-center text-xl text-[#1F3A93] font-medium">
+            Your cart is empty.
+          </p>
         ) : (
           <table className="container mx-auto table-fixed border-separate border-spacing-2 border-2 border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (
@@ -88,7 +98,7 @@ const CartPage = () => {
                   <td className="text-sm font-medium md:font-semibold md:tracking-wide text-[#1F3A93]">
                     ${item.itemId.price}
                   </td>
-                  <td className="">
+                  <td>
                     <button
                       onClick={() => handleRemoveItem(item.itemId._id)}
                       className="bg-[#1F3A93] px-[6px] w-[19px] rounded-sm font-semibold text-[#FFFDD0]"
