@@ -57,12 +57,12 @@ export default function HomePage() {
       <Navbar />
 
       <section className="pt-24">
-        <div className="pl-10 text-[21px] uppercase font-semibold tracking-wider mb-5">
+        <div className="pl-8 md:pl-10 text-[17px] md:text-[22px] uppercase font-semibold tracking-wider mb-5">
           Welcome {username}
         </div>
 
-        <div className="container w-[80%] py-10 mx-auto flex items-center justify-around bg-[#FFFDEB] shadow-lg rounded-md">
-          <h2 className="flex text-center text-[#333333] w-[40%] font-semibold tracking-wide leading-8 text-xl">
+        <div className="container flex flex-col space-y-10 md:space-y-0 md:flex-row items-center justify-around w-[85%] py-10 mx-auto bg-[#FFFDEB] shadow-lg rounded-md">
+          <h2 className="flex text-center text-[#333333] md:w-[40%] font-semibold tracking-wide leading-8 text-lg md:text-xl">
             Discover Your Perfect Accessory at AccessoryOasis, Where Every Piece
             Enhances Your Unique Style.
           </h2>
@@ -72,7 +72,7 @@ export default function HomePage() {
             alt="applewatch"
             height={350}
             width={350}
-            className="rounded-xl"
+            className="rounded-xl w-[80%] md:w-[35%]"
           />
         </div>
       </section>
