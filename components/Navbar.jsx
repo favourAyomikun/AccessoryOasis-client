@@ -34,7 +34,7 @@ const Navbar = () => {
         <Link href="/homepage/cartPage" className="relative">
           <HiOutlineShoppingCart className="text-[30px] md:text-[35px] text-white" />
           {totalQuantity > 0 && (
-            <span className="absolute -top-1 left-7 bg-#E6A8A1] text-white text-sm rounded-full px-2">
+            <span className="absolute -top-1 left-5 md:left-7 bg-#E6A8A1] text-white text-sm rounded-full px-2">
               {totalQuantity}
             </span>
           )}
