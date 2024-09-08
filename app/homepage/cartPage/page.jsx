@@ -75,7 +75,7 @@ const CartPage = () => {
             Your cart is empty.
           </p>
         ) : (
-          <table className="container mx-auto table-fixed border-separate border-spacing-2 border-2 border-[#B76E79] rounded-lg shadow-md">
+          <table className="container w-[90%] mx-auto table-fixed border-separate border-spacing-2 text-center border-2 border-[#B76E79] rounded-lg shadow-md">
             {cartItems.map((item) => (
               <tbody key={item.itemId._id}>
                 <tr>
@@ -89,7 +89,7 @@ const CartPage = () => {
                       className="w-48 h-20 md:h-40 rounded-lg object-cover object-center"
                     />
                   </td>
-                  <td className="md:text-lg font-medium md:font-semibold text-[#1F3A93]">
+                  <td className="text-base md:text-lg font-medium md:font-semibold text-[#1F3A93]">
                     {item.itemId.name}
                   </td>
                   <td className="text-sm md:text-base font-semibold">
@@ -101,19 +101,20 @@ const CartPage = () => {
                   <td>
                     <button
                       onClick={() => handleRemoveItem(item.itemId._id)}
-                      className="bg-[#1F3A93] px-[6px] w-[19px] rounded-sm font-semibold text-[#FFFDD0]"
+                      className="bg-[#1F3A93] px-[20px] w-[19px] font-semibold text-[#FFFDD0]"
                     >
                       -
                     </button>
                     <input
                       onChange={(e) => (e.target.value, item.itemId._id)}
                       type="number"
-                      className="w-1/4 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
+                      className="w-[25%] outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
                       value={item.quantity}
+                      disabled
                     />
                     <button
                       onClick={() => handleAddToCart(item.itemId._id)}
-                      className="bg-[#1F3A93] px-[4px] text-center rounded-sm font-semibold text-[#FFFDD0]"
+                      className="bg-[#1F3A93] px-[20px] w-[19px] font-semibold text-[#FFFDD0]"
                     >
                       +
                     </button>
@@ -125,7 +126,7 @@ const CartPage = () => {
         )}
 
         {totalPrice > 0 && (
-          <main className="container mx-auto w-[30%] mt-2">
+          <main className="container mx-auto w-[40%] md:w-[30%] mt-2">
             <div className="border-t border-black w-[100%]"></div>
             <div>
               <p className="font-medium md:font-semibold mb-1 text-[#B76E79]">
@@ -133,7 +134,7 @@ const CartPage = () => {
               </p>
               <Link
                 href={"/homepage/cartPage/orderDetails"}
-                className="block text-center bg-[#1F3A93] px-2 py-2 md:py-3 leading-none rounded text-white text-sm md:text-base"
+                className="block text-center bg-[#1F3A93] w-[100%] px-2 py-3 leading-none rounded text-white text-sm md:text-base"
               >
                 <button onClick={handleCheckout}>Proceed to Checkout</button>
               </Link>
