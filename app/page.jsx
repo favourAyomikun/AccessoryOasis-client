@@ -42,9 +42,9 @@ export default function Home() {
         
         const userId = decodedToken.id;
         
-        setLoading(true);
         if (userId) {
           localStorage.setItem("userId", userId);
+          setLoading(true);
           router.push("/homepage");
         } else {
           setErrorMessage("User ID not found in the token.");
