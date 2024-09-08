@@ -127,7 +127,7 @@ export default function Home() {
           disabled={loading}
         >
           {loading ? (
-            <ImSpinner10 className="mx-auto animate-spin text-[40px] md:text-[45px] text-[#B76E79]" />
+            <ImSpinner10 className="mx-auto animate-spin text-[40px] md:text-[42px] text-[#B76E79]" />
           ) : (
             "Sign In"
           )}
