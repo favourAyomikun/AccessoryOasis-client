@@ -61,8 +61,8 @@ export default function HomePage() {
           Welcome {username}
         </div>
 
-        <div className="container flex flex-col space-y-10 md:space-y-0 md:flex-row items-center justify-around w-[85%] py-10 mx-auto bg-[#FFFDEB] shadow-lg rounded-md">
-          <h2 className="flex text-center text-[#333333] md:w-[40%] font-semibold tracking-wide leading-8 text-lg md:text-xl">
+        <div className="container flex flex-col-reverse md:flex-row items-center justify-around w-[85%] py-10 mx-auto bg-[#FFFDEB] shadow-lg rounded-md">
+          <h2 className="flex text-center text-[#333333] md:w-[40%] font-semibold tracking-wide leading-8 text-lg md:text-xl mt-10 md:mt-0">
             Discover Your Perfect Accessory at AccessoryOasis, Where Every Piece
             Enhances Your Unique Style.
           </h2>
@@ -77,16 +77,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="flex items-center justify-around mt-20">
+      <section className="container flex flex-col space-y-10 md:space-y-0 md:flex-row items-center justify-around w-[85%] py-10 mx-auto bg-[#FFFDEB] shadow-lg rounded-md mt-20">
         <Image
           src="/bag.gif"
           unoptimized
           alt="bag"
           height={350}
           width={350}
-          className="rounded-md h-[300px] object-cover"
-        />
-        <p className="text-center text-[#333333] font-semibold w-[50%] tracking-wide">
+          className="rounded-xl w-[80%] h-96 md:w-[35%]"
+          />
+        <p className="flex text-center text-[#333333] w-[90%] md:w-[40%] font-semibold tracking-wide leading-8 text text-lg">
           Experience the art of accessorizing with AccessoryOasis. Our range of
           meticulously designed accessories provides you with the perfect blend
           of sophistication and flair. Whether you're dressing up or down, find
@@ -95,7 +95,7 @@ export default function HomePage() {
       </section>
 
       <div className="mt-20">
-        <h2 className="text-[#333333] text-xl pl-8 mb-5 font-semibold tracking-wider">
+        <h2 className="pl-8 md:pl-10 text-[#333333] text-[19px] md:text-[22px] mb-5 font-extrabold tracking-wider">
           Available Accessories
         </h2>
 
@@ -104,11 +104,11 @@ export default function HomePage() {
           <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
         ) : (
           // show accessories data once loaded
-          <div className="grid grid-cols-3 gap-x-8 place-items-center gap-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 place-items-center gap-y-10">
             {accessoriesData.map((accessory) => (
               <div
                 key={accessory._id}
-                className="bg-[#FFFDD0] border border-[#1F3A93] rounded-md overflow-hidden w-[80%]"
+                className="bg-[#FFFDD0] border border-[#1F3A93] rounded-md overflow-hidden w-[83%] md:w-[80%]"
               >
                 <Image
                   src={`${process.env.NEXT_PUBLIC_API_URL}${accessory.image_url}`}
@@ -123,7 +123,6 @@ export default function HomePage() {
                     {accessory.name}
                   </h2>
                   <p className="font-semibold">${accessory.price}</p>
-                  {/* <p>{accessory.category}</p> */}
                   <button
                     className="bg-[#1F3A93] border border-[#B76E79] p-2 w-[50%] rounded-sm mt-5 text-[#E6A8A1]"
                     onClick={() => handleAddToCart(accessory._id)}
