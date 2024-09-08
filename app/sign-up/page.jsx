@@ -11,31 +11,41 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const handleRegister = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+
+    setLoading(true);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
-        username,
-        email,
-        password,
-      })
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        {
+          username,
+          email,
+          password,
+        }
+      );
 
       if (response.status === 201) {
-        setSuccessMessage(response.data.message)
-        setErrorMessage('')
-        console.log(response.data)
+        setSuccessMessage(response.data.message);
+        setErrorMessage("");
+        console.log(response.data);
 
         // redirect to sign in after user has registered
-        router.push('/')
+        router.push("/");
       } else {
-        setErrorMessage(response.data.message || 'Registration failed')
+        setErrorMessage(response.data.message || "Registration failed");
       }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Error during registration");
+      setErrorMessage(
+        error.response?.data?.message || "Error during registration"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,12 +131,20 @@ const Register = () => {
         <button
           type="submit"
           className="mt-5 bg-[#1F3A93] text-[#FFFDEB] tracking-wide font-bold py-2 px-4 rounded-md w-full"
+          disabled={loading}
         >
-          Sign Up
+          {loading ? (
+            <ImSpinner10 className="mx-auto animate-spin text-[40px] md:text-[45px] text-[#B76E79]" />
+          ) : (
+            "Sign Up"
+          )}
         </button>
         <p className="mt-5 text-[#1F3A93]">
           Already have an account?{" "}
-          <Link href="/" className="underline underline-offset-2 text-[#B76E79]">
+          <Link
+            href="/"
+            className="underline underline-offset-2 text-[#B76E79]"
+          >
             Sign in
           </Link>
         </p>
