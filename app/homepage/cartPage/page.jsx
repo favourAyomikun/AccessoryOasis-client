@@ -99,26 +99,29 @@ const CartPage = () => {
                     ${item.itemId.price}
                   </td>
                   <td>
-                    <button
-                      onClick={() => handleRemoveItem(item.itemId._id)}
-                      className="bg-[#1F3A93] px-[20px] w-[19px] font-semibold text-[#FFFDD0]"
-                    >
-                      -
-                    </button>
-                    <input
-                      onChange={(e) => (e.target.value, item.itemId._id)}
-                      type="number"
-                      className="w-[25%] outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
-                      value={item.quantity}
-                      disabled
-                    />
-                    <button
-                      onClick={() => handleAddToCart(item.itemId._id)}
-                      className="bg-[#1F3A93] px-[20px] w-[19px] font-semibold text-[#FFFDD0]"
-                    >
-                      +
-                    </button>
-                  </td>
+  <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 ">
+    <button
+      onClick={() => handleRemoveItem(item.itemId._id)}
+      className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
+    >
+      -
+    </button>
+    <input
+      onChange={(e) => (e.target.value, item.itemId._id)}
+      type="number"
+      className="w-11 md:w-10 outline-none border border-[#1F3A93] rounded text-center bg-[#FFFDD0]"
+      value={item.quantity}
+      disabled
+    />
+    <button
+      onClick={() => handleAddToCart(item.itemId._id)}
+      className="bg-[#1F3A93] px-4 py-1 font-semibold text-[#FFFDD0]"
+    >
+      +
+    </button>
+  </div>
+</td>
+
                 </tr>
               </tbody>
             ))}
@@ -126,7 +129,7 @@ const CartPage = () => {
         )}
 
         {totalPrice > 0 && (
-          <main className="container mx-auto w-[40%] md:w-[30%] mt-2">
+          <main className="container mx-auto w-[50%] md:w-[30%] mt-2">
             <div className="border-t border-black w-[100%]"></div>
             <div>
               <p className="font-medium md:font-semibold mb-1 text-[#B76E79]">
