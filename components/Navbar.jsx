@@ -23,14 +23,14 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="container max-w-full h-14 fixed flex items-center justify-around bg-[#1F3A93]">
+    <nav className="container max-w-full h-14 fixed flex items-center justify-between px-10 md:px-40 bg-[#1F3A93]">
       <Link
         href={"/homepage"}
         className={`${kellyslab.className} text-[#E6A8A1] text-[30px] md:text-[33px]`}
       >
         AccessoryOasis
       </Link>
-      <div className="flex space-x-2 md:space-x-5">
+      <div className="flex space-x-5">
         <Link href="/homepage/cartPage" className="relative">
           <HiOutlineShoppingCart className="text-[30px] md:text-[35px] text-white" />
           {totalQuantity > 0 && (
