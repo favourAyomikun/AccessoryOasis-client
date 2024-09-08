@@ -5,22 +5,23 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { ImSpinner10 } from "react-icons/im";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    try {
-      // Clear any previous error messages
-      setErrorMessage("");
+    setLoading(true);
 
+    try {
       // Send login data to the server
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
@@ -39,10 +40,8 @@ export default function Home() {
 
         // Decode the token to get userId and other info (if needed)
         const decodedToken = jwtDecode(token);
-        console.log('Decoded token:', decodedToken)
 
         const userId = decodedToken.id;
-        console.log("User ID:", userId); // Debug log for userId
 
         if (userId) {
           localStorage.setItem("userId", userId);
@@ -55,6 +54,8 @@ export default function Home() {
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Error during login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,9 +69,8 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [successMessage, errorMessage]);
 
-
   return (
-    <main className="bg-[#FFFDD0] h-screen pt-40">
+    <main className="bg-[#FFFDD0] flex flex-col justify-center h-screen">
       {successMessage && (
         <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
           {successMessage}
@@ -83,7 +83,7 @@ export default function Home() {
       )}
       <form
         onSubmit={handleSignIn}
-        className="max-w-md mx-auto bg-[#F5F5F5] shadow-lg rounded-lg p-6"
+        className="max-w-sm md:max-w-md mx-auto w-[90%] bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
           <label htmlFor="email" className="label">
@@ -124,12 +124,20 @@ export default function Home() {
         <button
           type="submit"
           className="mt-5 bg-[#1F3A93] text-[#FFFDEB] tracking-wide font-bold py-2 px-4 rounded-md w-full"
+          disabled={loading}
         >
-          Sign In
+          {loading ? (
+            <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
+          ) : (
+            "Sign In"
+          )}
         </button>
         <p className="mt-5 text-[#1F3A93]">
           Don't have an account?{" "}
-          <Link href="/sign-up" className="underline underline-offset-2  text-[#B76E79]">
+          <Link
+            href="/sign-up"
+            className="underline underline-offset-2  text-[#B76E79]"
+          >
             Sign up
           </Link>
         </p>

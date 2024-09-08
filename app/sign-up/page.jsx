@@ -49,7 +49,7 @@ const Register = () => {
   }, [successMessage, errorMessage]);
 
   return (
-    <main className="pt-40 bg-[#FFFDD0] h-screen">
+    <main className="bg-[#FFFDD0] flex flex-col justify-center h-screen">
       {successMessage && (
         <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
           {successMessage}
@@ -62,7 +62,7 @@ const Register = () => {
       )}
       <form
         onSubmit={handleRegister}
-        className=" max-w-md mx-auto bg-[#F5F5F5] shadow-lg rounded-lg p-6"
+        className="max-w-sm md:max-w-md mx-auto w-[90%] bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
         <div className="input_container">
           <label htmlFor="username" className="label ">

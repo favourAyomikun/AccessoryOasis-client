@@ -7,9 +7,9 @@
 }
 
 .input_container {
-    @apply flex flex-col mb-1;
+    @apply flex flex-col mb-2;
 }
 
 .label {
-    @apply font-semibold text-lg tracking-wider text-[#1F3A93];
+    @apply font-semibold text-base md:text-lg tracking-wider text-[#1F3A93];
 }
