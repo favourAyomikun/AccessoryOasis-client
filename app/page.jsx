@@ -19,8 +19,7 @@ export default function Home() {
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
-
+    
     try {
       // Send login data to the server
       const response = await axios.post(
@@ -30,19 +29,20 @@ export default function Home() {
           password,
         }
       );
-
+      
       if (response.status === 200) {
         setSuccessMessage(response.data.message);
-
+        
         // Store JWT in local storage (or cookies) and redirect to the homepage
         const token = response.data.token;
         localStorage.setItem("token", token);
-
+        
         // Decode the token to get userId and other info (if needed)
         const decodedToken = jwtDecode(token);
-
+        
         const userId = decodedToken.id;
-
+        
+        setLoading(true);
         if (userId) {
           localStorage.setItem("userId", userId);
           router.push("/homepage");
@@ -127,7 +127,7 @@ export default function Home() {
           disabled={loading}
         >
           {loading ? (
-            <ImSpinner10 className="mx-auto animate-spin text-[48px] text-[#B76E79]" />
+            <ImSpinner10 className="mx-auto animate-spin text-[40px] md:text-[48px] text-[#B76E79]" />
           ) : (
             "Sign In"
           )}
