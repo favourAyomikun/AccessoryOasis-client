@@ -41,7 +41,7 @@ const Register = () => {
         console.log(email)
 
         // Redirect to OTP verification page with email as query parameter
-        router.push(`/otp-verification?email=${email}`);
+        router.push(`/sign-up/otp-verification?email=${email}`);
       } else {
         setErrorMessage(response.data.message || "Registration failed");
       }
