@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState,} from "react";
 import { ImSpinner10 } from "react-icons/im";
 
 const OtpVerificationPage = () => {
