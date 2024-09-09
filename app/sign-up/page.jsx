@@ -123,7 +123,7 @@ const Register = () => {
             }}
             required
           />
-          <small className="text-gray-700 flex items-center">
+          <small className="text-gray-700 flex items-center font-semibold text-xs md:text-sm">
             <HiInformationCircle /> Input a correct email because there is OTP
             verification.
           </small>
