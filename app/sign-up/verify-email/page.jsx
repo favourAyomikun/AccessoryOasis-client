@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState,  } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { ImSpinner10 } from "react-icons/im";
 
 const OtpVerificationPage = () => {
@@ -54,6 +54,7 @@ const OtpVerificationPage = () => {
   }, [successMessage, errorMessage]);
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <main className="bg-[#FFFDD0] flex flex-col justify-center h-screen">
       {successMessage && (
         <p className="text-green-600 font-semibold text-center tracking-wide text-[17px] mb-2">
@@ -65,7 +66,7 @@ const OtpVerificationPage = () => {
           {errorMessage}
         </p>
       )}
-       <form
+      <form
         onSubmit={handleOtpSubmit}
         className="max-w-sm md:max-w-md mx-auto w-[90%] bg-[#F5F5F5] shadow-lg rounded-lg p-6"
       >
@@ -94,6 +95,7 @@ const OtpVerificationPage = () => {
         </button>
       </form>
     </main>
+  </Suspense>
   );
 };
 
