@@ -37,8 +37,11 @@ const Register = () => {
         setErrorMessage("");
         console.log(response.data);
 
-        // redirect to sign in after user has registered
-        router.push("/");
+        const email = response.data.email;
+        console.log(email)
+
+        // Redirect to OTP verification page with email as query parameter
+        router.push(`/otp-verification?email=${email}`);
       } else {
         setErrorMessage(response.data.message || "Registration failed");
       }
