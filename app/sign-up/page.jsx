@@ -39,6 +39,11 @@ const Register = () => {
 
         const email = response.data.user.email;
 
+        // clear the form inputs after successful registration
+        setUsername("");
+        setEmail("");
+        setPassword("");
+
         // send otp to user's email
         const otpResponse = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/auth/send-otp`,

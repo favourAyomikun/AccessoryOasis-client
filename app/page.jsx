@@ -20,7 +20,7 @@ export default function Home() {
     e.preventDefault();
 
     setLoading(true);
-    
+
     try {
       // Send login data to the server
       const response = await axios.post(
@@ -30,22 +30,26 @@ export default function Home() {
           password,
         }
       );
-      
+
       if (response.status === 200) {
         setSuccessMessage(response.data.message);
-        
+
         // Store JWT in local storage (or cookies) and redirect to the homepage
         const token = response.data.token;
         localStorage.setItem("token", token);
-        
+
         // Decode the token to get userId and other info (if needed)
         const decodedToken = jwtDecode(token);
-        
+
         const userId = decodedToken.id;
-        
+
         if (userId) {
           localStorage.setItem("userId", userId);
           router.push("/homepage");
+
+          // Clear the form after successful login
+          setEmail("");
+          setPassword("");
         } else {
           setErrorMessage("User ID not found in the token.");
         }
