@@ -21,7 +21,6 @@ const CheckoutPage = () => {
         );
         const items = response.data.items || [];
         setCartItems(items);
-        console.log(items)
 
         // Calculate and set the total price
         const total = items.reduce((acc, item) => {
