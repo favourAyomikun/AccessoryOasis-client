@@ -89,7 +89,7 @@ const OtpVerificationPage = () => {
           {loading ? (
             <ImSpinner10 className="mx-auto animate-spin text-[40px] md:text-[42px] text-[#B76E79]" />
           ) : (
-            "Verify OTP"
+            "Verify OTP "
           )}
         </button>
       </form>
