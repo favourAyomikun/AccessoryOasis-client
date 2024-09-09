@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { ImSpinner10 } from "react-icons/im";
 
 const Register = () => {
   const [email, setEmail] = useState("");
