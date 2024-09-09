@@ -35,13 +35,21 @@ const Register = () => {
       if (response.status === 201) {
         setSuccessMessage(response.data.message);
         setErrorMessage("");
-        console.log(response.data);
 
-        const email = response.data.email;
-        console.log(email)
+        const email = response.data.user.email;
 
-        // Redirect to OTP verification page with email as query parameter
-        router.push(`/sign-up/otp-verification?email=${email}`);
+        // send otp to user's email
+        const otpResponse = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/send-otp`,
+          { email }
+        );
+
+        if (otpResponse.status === 200) {
+          // Redirect to OTP verification page with email as query parameter
+          router.push(`/sign-up/verify-email?email=${email}`);
+        } else {
+          setErrorMessage("Failed to send OTP");
+        }
       } else {
         setErrorMessage(response.data.message || "Registration failed");
       }
@@ -114,6 +122,9 @@ const Register = () => {
             }}
             required
           />
+          <small className="text-gray-500">
+            🛈 Input a correct email because there is OTP verification.
+          </small>
         </div>
         <div className="input_container">
           <label htmlFor="password" className="label ">

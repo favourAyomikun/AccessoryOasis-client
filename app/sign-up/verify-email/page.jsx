@@ -43,6 +43,15 @@ const OtpVerificationPage = () => {
     }
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 3000); // Clear messages after 3 seconds
+
+    return () => clearTimeout(timer); // Clear timeout if the component unmounts
+  }, [successMessage, errorMessage]);
+
   return (
     <main className="bg-[#FFFDD0] flex flex-col justify-center h-screen">
       {successMessage && (
