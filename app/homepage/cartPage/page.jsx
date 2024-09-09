@@ -71,7 +71,7 @@ const CartPage = () => {
     return () => clearTimeout(timer);
   }, [cartItems]);
   
-  
+
   const handleCheckout = () => {
     router.push("/homepage/cartPage/checkout");
   };
