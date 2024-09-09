@@ -123,9 +123,9 @@ const Register = () => {
             }}
             required
           />
-          <small className="text-gray-500">
-            <HiInformationCircle />
-            Input a correct email because there is OTP verification.
+          <small className="text-gray-700 flex items-center">
+            <HiInformationCircle /> Input a correct email because there is OTP
+            verification.
           </small>
         </div>
         <div className="input_container">
