@@ -18,6 +18,10 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
+  const [successMessage, setSuccessMessage] = useState({
+    accessoryId: null,
+    message: "",
+  });
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -47,6 +51,15 @@ export default function HomePage() {
         setLoading(false);
       });
   }, []);
+
+  const addToCart = (id) => {
+    handleAddToCart(id);
+    setSuccessMessage({ accessoryId: id, message: "Item added to cart!" });
+    
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 1000);
+  };  
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -85,7 +98,7 @@ export default function HomePage() {
           height={350}
           width={350}
           className="rounded-xl w-[80%] h-96 md:w-[35%]"
-          />
+        />
         <p className="flex text-center text-[#333333] w-[90%] md:w-[40%] font-semibold tracking-wide leading-8 text text-lg">
           Experience the art of accessorizing with AccessoryOasis. Our range of
           meticulously designed accessories provides you with the perfect blend
@@ -123,9 +136,17 @@ export default function HomePage() {
                     {accessory.name}
                   </h2>
                   <p className="font-semibold">${accessory.price}</p>
+
+                  {successMessage &&
+                    successMessage.accessoryId === accessory._id && (
+                      <p className="text-green-600 tracking-wider font-semibold text-sm md:text-base mt-2">
+                        {successMessage.message}
+                      </p>
+                    )}
+
                   <button
                     className="bg-[#1F3A93] border border-[#B76E79] p-2 w-[50%] rounded-sm mt-5 text-[#E6A8A1]"
-                    onClick={() => handleAddToCart(accessory._id)}
+                    onClick={() => addToCart(accessory._id)}
                   >
                     Add to Cart
                   </button>
