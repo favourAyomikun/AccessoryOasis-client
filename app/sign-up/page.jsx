@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ImSpinner10 } from "react-icons/im";
+import { HiInformationCircle } from "react-icons/hi";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -123,7 +124,8 @@ const Register = () => {
             required
           />
           <small className="text-gray-500">
-            🛈 Input a correct email because there is OTP verification.
+            <HiInformationCircle />
+            Input a correct email because there is OTP verification.
           </small>
         </div>
         <div className="input_container">
