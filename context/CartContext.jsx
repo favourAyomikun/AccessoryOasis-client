@@ -30,6 +30,7 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
+  // function to add cart item to database
   const handleAddToCart = async (accessoryId) => {
     const userId = localStorage.getItem("userId");
 
@@ -46,6 +47,7 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
+  // function to remove cart item from database
   const handleRemoveItem = async (itemId) => {
     const userId = localStorage.getItem("userId");
 

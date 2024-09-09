@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { ImSpinner10 } from "react-icons/im";
 
-const OrderDetailsPage = () => {
+const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -92,4 +92,4 @@ const OrderDetailsPage = () => {
   );
 };
 
-export default OrderDetailsPage;
+export default CheckoutPage;

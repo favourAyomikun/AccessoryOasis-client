@@ -16,6 +16,7 @@ const Register = () => {
 
   const router = useRouter();
 
+  // function to register user to the database
   const handleRegister = async (e) => {
     e.preventDefault();
 

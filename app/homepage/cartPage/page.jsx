@@ -10,49 +10,70 @@ import { CartContext } from "@/context/CartContext";
 import { ImSpinner10 } from "react-icons/im";
 
 const CartPage = () => {
-  const { cartItems, handleRemoveItem, handleAddToCart } =
-    useContext(CartContext);
+  const { cartItems, handleRemoveItem, handleAddToCart } = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // const calculateTotalPrice = (items) => {
+  //   // Ensure items is an array
+  //   if (!Array.isArray(items)) {
+  //     console.error("Expected an array of items.");
+  //     return 0;
+  //   }
+
+  //   // Calculate total price
+  //   const total = items.reduce((acc, item) => {
+  //     // Ensure item and item.itemId are valid
+  //     if (
+  //       item &&
+  //       item.itemId &&
+  //       typeof item.quantity === "number" &&
+  //       typeof item.itemId.price === "number"
+  //     ) {
+  //       return acc + item.quantity * item.itemId.price;
+  //     }
+  //     return acc;
+  //   }, 0);
+
+  //   return total;
+  // };
+
+  // // Fetch cart items on component mount
+  // useEffect(() => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     const total = calculateTotalPrice(cartItems);
+  //     setTotalPrice(total);
+  //     setLoading(false);
+  //   }, 1000);
+  // }, [cartItems]);
   const calculateTotalPrice = (items) => {
-    // Ensure items is an array
-    if (!Array.isArray(items)) {
-      console.error("Expected an array of items.");
-      return 0;
-    }
-
-    // Calculate total price
-    const total = items.reduce((acc, item) => {
-      // Ensure item and item.itemId are valid
-      if (
-        item &&
-        item.itemId &&
-        typeof item.quantity === "number" &&
-        typeof item.itemId.price === "number"
-      ) {
-        return acc + item.quantity * item.itemId.price;
-      }
-      return acc;
+    return items.reduce((acc, { itemId, quantity }) => {
+      const price = itemId?.price ?? 0;
+      return acc + quantity * price;
     }, 0);
-
-    return total;
   };
-
-  // Fetch cart items on component mount
+  
+  // Fetch cart items and calculate total price
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
+  
+    // Simulate a delay (remove if unnecessary)
+    const timer = setTimeout(() => {
       const total = calculateTotalPrice(cartItems);
       setTotalPrice(total);
       setLoading(false);
     }, 1000);
+  
+    // Cleanup timeout when the component unmounts
+    return () => clearTimeout(timer);
   }, [cartItems]);
-
+  
+  
   const handleCheckout = () => {
-    router.push("/checkout");
+    router.push("/homepage/cartPage/checkout");
   };
 
   if (error) {
