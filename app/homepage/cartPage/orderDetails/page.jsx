@@ -37,7 +37,7 @@ const OrderDetailsPage = () => {
   }, []);
 
   return (
-    <div className="bg-[#FFFDD0] h-[100%]">
+    <div className="bg-[#FFFDD0] h-[100%] md:h-[100%]">
       <Navbar />
 
       <main className="pt-[105px] pb-10">
