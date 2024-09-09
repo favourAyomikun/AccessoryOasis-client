@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState,  } from "react";
 import { ImSpinner10 } from "react-icons/im";
 
 const OtpVerificationPage = () => {
@@ -12,7 +12,8 @@ const OtpVerificationPage = () => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
+
+  const searchParams = useSearchParams()
   const email = searchParams.get("email");
 
   const handleOtpSubmit = async (e) => {
