@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState,} from "react";
 import { ImSpinner10 } from "react-icons/im";
 
@@ -10,12 +10,17 @@ const OtpVerificationPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState(""); 
 
   const router = useRouter();
 
-  const searchParams = useSearchParams()
-  const email = searchParams.get("email");
-
+  useEffect(() => {
+    // Get email from query parameters using window.location
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailFromParams = urlParams.get("email");
+    setEmail(emailFromParams);
+  }, []);
+  
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
